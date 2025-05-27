@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -44,7 +43,7 @@ export default function SubmitGamePage() {
       title: "Game submitted!",
       description:
         "Thanks for submitting. Your game will be reviewed and added soon.",
-      variant: "success",
+      variant: "default",
     });
     // Here you would call an API or integrate with Supabase/GitHub once set up
     setForm({
