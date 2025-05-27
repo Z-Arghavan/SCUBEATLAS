@@ -17,6 +17,7 @@ export default function GameGrid({ games, onMore, viewMode }: GameGridProps) {
 
   return (
     <div
+      id="main-results"
       className={
         viewMode === "grid"
           ? "grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 py-6"

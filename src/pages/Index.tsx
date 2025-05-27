@@ -1,10 +1,13 @@
-
 import { useState } from "react";
 import GameFilterPanel, { Filters } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
 import { GameData } from "@/components/GameCard";
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Sample data for games
 const demoGames: GameData[] = [
@@ -70,7 +73,6 @@ function uniqueValuesFor(games: GameData[], field: keyof GameData): string[] {
   return Array.from(set).sort();
 }
 
-
 export default function Index() {
   // Filtering state
   const [filters, setFilters] = useState<Filters>({
@@ -113,8 +115,34 @@ export default function Index() {
     return true;
   });
 
+  const navigate = useNavigate();
+
+  // Chip filter event handler
+  useEffect(() => {
+    function onChip(ev: any) {
+      const { field, value } = ev.detail || {};
+      if (!field || !value) return;
+      if (["technology", "age", "purpose"].includes(field)) {
+        setFilters(f => ({
+          ...f,
+          [field]: [value],
+        }));
+      } else {
+        setFilters(f => ({
+          ...f,
+          [field]: value,
+        }));
+      }
+      // Optionally clear search on chip click
+      setSearch("");
+    }
+    window.addEventListener("gamefilter:chip", onChip);
+    return () => window.removeEventListener("gamefilter:chip", onChip);
+  }, []);
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col items-stretch">
+      <Header />
       <div className="max-w-7xl w-full mx-auto py-10 px-2 sm:px-4">
         <h1 className="text-4xl font-bold mb-2 text-center text-primary">Atlas of Circular & Sustainable Built Environment Serious Games</h1>
         <p className="text-lg text-gray-500 mb-10 text-center max-w-[700px] mx-auto">
@@ -182,9 +210,7 @@ export default function Index() {
           )}
         </DialogContent>
       </Dialog>
-      <footer className="px-4 pb-8 pt-10 w-full text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Circular Atlas • Contact for contributions.
-      </footer>
+      <Footer />
     </main>
   );
 }
