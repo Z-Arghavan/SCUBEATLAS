@@ -1,17 +1,15 @@
 
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Home", to: "/" },
-  { label: "About Us", to: "/about" },
 ];
 
 export default function Header() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   return (
     <header className="bg-white border-b shadow-sm sticky top-0 z-40">
@@ -32,6 +30,14 @@ export default function Header() {
               </Link>
             ))}
             <a
+              href="https://isbe.bwk.tue.nl/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1 rounded hover:bg-sky-50 transition text-sm"
+            >
+              About Us
+            </a>
+            <a
               href="https://github.com/YOUR_GITHUB_REPO" // TODO: Insert actual repo URL
               target="_blank"
               rel="noopener noreferrer"
@@ -46,14 +52,15 @@ export default function Header() {
         <div className="flex gap-2 items-center">
           <Button
             size="sm"
-            onClick={() => navigate("/submit")}
+            onClick={() => window.open("https://github.com/Z-Arghavan/SCUBE-Atlas/issues", "_blank")}
             variant="default"
             className="bg-green-500 text-white hover:bg-green-600"
           >
-            Submit a Game
+            Submit an Issue
           </Button>
         </div>
       </div>
     </header>
   );
 }
+
