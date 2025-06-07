@@ -615,7 +615,8 @@ export default function Index() {
     technology: [],
     age: [],
     purpose: [],
-    audience: []
+    audience: [],
+    playerMode: []
   });
   const [search, setSearch] = useState("");
   const [listMode, setListMode] = useState<"grid" | "list">("grid");
@@ -643,6 +644,9 @@ export default function Index() {
     // Audience filter - now properly implemented
     if (filters.audience.length && !filters.audience.some(a => game.audience.includes(a))) return false;
 
+    // Player Mode filter
+    if (filters.playerMode.length && !filters.playerMode.some(pm => game.playerMode?.includes(pm))) return false;
+
     // Keyword search
     if (search.trim() !== "") {
       const flat = [game.title, game.description, game.year, game.category, game.technology.join(" "), game.age.join(" "), game.purpose.join(" "), game.audience.join(" ")].join(" ").toLowerCase();
@@ -660,7 +664,7 @@ export default function Index() {
         value
       } = ev.detail || {};
       if (!field || !value) return;
-      if (["technology", "age", "purpose", "audience"].includes(field)) {
+      if (["technology", "age", "purpose", "audience", "playerMode"].includes(field)) {
         setFilters(f => ({
           ...f,
           [field]: [value]
