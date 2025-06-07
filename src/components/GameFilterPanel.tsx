@@ -19,6 +19,7 @@ const purposeOptions = [
   "All",
 ];
 
+// User-friendly category labels mapped to JSON categories
 const categoryOptions = [
   "Sustainable Community Engagement",
   "Natural Hazards and Extreme Events",
@@ -28,6 +29,17 @@ const categoryOptions = [
   "Waste and Resource Management",
   "Construction and Architecture",
 ];
+
+// Mapping from user categories to JSON categories
+export const categoryMapping: Record<string, string> = {
+  "Sustainable Community Engagement": "General Sustainable Development",
+  "Natural Hazards and Extreme Events": "Natural Hazards",
+  "Urban Development and Planning": "Urban Development",
+  "Energy Efficiency and Transition": "Energy Efficiency and Transition",
+  "Water Management": "Water",
+  "Waste and Resource Management": "Circular Economy",
+  "Construction and Architecture": "Construction",
+};
 
 interface GameFilterPanelProps {
   filters: Filters;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import GameFilterPanel, { Filters } from "@/components/GameFilterPanel";
+import GameFilterPanel, { Filters, categoryMapping } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
 import { GameData } from "@/components/GameCard";
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle } from "@/components/ui/dialog";
@@ -525,6 +525,7 @@ function uniqueValuesFor(games: GameData[], field: keyof GameData): string[] {
   if (field === "year") return Array.from(set).sort((a, b) => Number(b) - Number(a));
   return Array.from(set).sort();
 }
+
 export default function Index() {
   // Filtering state
   const [filters, setFilters] = useState<Filters>({
@@ -545,7 +546,13 @@ export default function Index() {
   const gamesFiltered = realGames.filter(game => {
     // Filter by dropdowns
     if (filters.year && game.year !== filters.year) return false;
-    if (filters.category && game.category !== filters.category) return false;
+    
+    // Map user category to JSON category for filtering
+    if (filters.category) {
+      const jsonCategory = categoryMapping[filters.category];
+      if (jsonCategory && game.category !== jsonCategory) return false;
+    }
+    
     // Tech, age, purpose (multi)
     if (filters.technology.length && !filters.technology.some(t => game.technology.includes(t))) return false;
     if (filters.age.length && !filters.age.some(a => game.age.includes(a))) return false;
@@ -572,6 +579,13 @@ export default function Index() {
         setFilters(f => ({
           ...f,
           [field]: [value]
+        }));
+      } else if (field === "category") {
+        // Find the user category that maps to this JSON category
+        const userCategory = Object.keys(categoryMapping).find(key => categoryMapping[key] === value);
+        setFilters(f => ({
+          ...f,
+          [field]: userCategory || value
         }));
       } else {
         setFilters(f => ({
