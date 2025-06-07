@@ -1,5 +1,4 @@
 
-
 import { useState } from "react";
 import { Search, List, Grid2x2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
-const techOptions = ["XR", "PC", "Physical", "Hybrid"];
+const techOptions = ["Digital", "Physical", "Virtual Reality (XR)", "Hybrid"];
 const ageOptions = ["Children", "Adults"];
 const purposeOptions = [
   "Pedagogy",
@@ -254,4 +253,3 @@ export default function GameFilterPanel({
     </div>
   );
 }
-
