@@ -19,6 +19,12 @@ const audienceMapping: Record<string, string> = {
   "g": "General Public"
 };
 
+// Mapping for player mode codes to user-friendly labels
+const playerModeMapping: Record<string, string> = {
+  "B": "Both",
+  "b": "Both"
+};
+
 // Helper function to parse audience from JSON data
 function parseAudience(audienceData: any): string[] {
   if (!audienceData) return [];
@@ -39,6 +45,26 @@ function parseAudience(audienceData: any): string[] {
   return [];
 }
 
+// Helper function to parse player mode from JSON data
+function parsePlayerMode(playerModeData: any): string[] {
+  if (!playerModeData) return [];
+  
+  // If it's already an array, process each item
+  if (Array.isArray(playerModeData)) {
+    return playerModeData.map(item => playerModeMapping[item] || item).filter(Boolean);
+  }
+  
+  // If it's a string, split by common delimiters and map
+  if (typeof playerModeData === 'string') {
+    return playerModeData
+      .split(/[\/,\s]+/)
+      .map(code => playerModeMapping[code.trim()] || code.trim())
+      .filter(Boolean);
+  }
+  
+  return [];
+}
+
 // Real games data from forRepo (1).json
 const realGames: GameData[] = [{
   id: 1,
@@ -50,6 +76,7 @@ const realGames: GameData[] = [{
   age: ["Adults"],
   purpose: ["Participation"],
   audience: parseAudience("G"), // General Public
+  playerMode: parsePlayerMode("B"), // Both
   link: ""
 }, {
   id: 2,
@@ -61,6 +88,7 @@ const realGames: GameData[] = [{
   age: ["Adults"],
   purpose: ["Pedagogy"],
   audience: parseAudience("B"), // Business Professionals
+  playerMode: parsePlayerMode("B"), // Both
   link: ""
 }, {
   id: 3,
@@ -691,8 +719,7 @@ export default function Index() {
   return <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col items-stretch">
       <Header />
       <div className="max-w-7xl w-full mx-auto py-10 px-2 sm:px-4">
-        <h1 className="text-4xl font-bold mb-2 text-center text-primary">Atlas of Sustainable & Circular 
-Urban Built Environment Serious Games</h1>
+        <h1 className="text-3xl font-bold mb-2 text-center text-primary">Atlas of Sustainable & Circular Urban Built Environment Serious Games</h1>
         <p className="text-lg text-gray-500 mb-10 text-center max-w-[700px] mx-auto">
       </p>
         <GameFilterPanel filters={filters} setFilters={setFilters} search={search} setSearch={setSearch} listMode={listMode} setListMode={setListMode} yearOptions={yearOptions} />
