@@ -19,6 +19,7 @@ export interface GameData {
   age: string[];
   purpose: string[];
   audience: string[];
+  playerMode?: string[];
   link?: string;
 }
 
