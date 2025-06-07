@@ -153,7 +153,7 @@ export default function GameFilterPanel({
               Technology
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-48 z-30 bg-white">
+          <PopoverContent className="w-48 z-50 bg-white" side="bottom">
             {techOptions.map(opt => (
               <label className="flex gap-2 mb-2 cursor-pointer items-center" key={opt}>
                 <Checkbox
@@ -172,7 +172,7 @@ export default function GameFilterPanel({
               Age
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-44 z-30 bg-white">
+          <PopoverContent className="w-44 z-50 bg-white" side="bottom">
             {ageOptions.map(opt => (
               <label className="flex gap-2 mb-2 cursor-pointer items-center" key={opt}>
                 <Checkbox
@@ -191,7 +191,7 @@ export default function GameFilterPanel({
               Purpose
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-56 z-30 bg-white">
+          <PopoverContent className="w-56 z-50 bg-white" side="bottom">
             {purposeOptions.map(opt => (
               <label className="flex gap-2 mb-2 cursor-pointer items-center" key={opt}>
                 <Checkbox
