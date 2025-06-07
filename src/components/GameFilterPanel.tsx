@@ -1,4 +1,5 @@
 
+
 import { useState } from "react";
 import { Search, List, Grid2x2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,8 @@ const purposeOptions = [
   "Persuasion & Participation",
   "All",
 ];
+
+const audienceOptions = ["General Public", "Students", "Business Professionals"];
 
 // User-friendly category labels mapped to JSON categories
 const categoryOptions = [
@@ -57,6 +60,7 @@ export interface Filters {
   technology: string[];
   age: string[];
   purpose: string[];
+  audience: string[];
 }
 
 export default function GameFilterPanel({
@@ -95,6 +99,7 @@ export default function GameFilterPanel({
       technology: [],
       age: [],
       purpose: [],
+      audience: [],
     });
     setSearch("");
   }
@@ -215,6 +220,25 @@ export default function GameFilterPanel({
             ))}
           </PopoverContent>
         </Popover>
+        {/* Audience */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" size="sm" className="px-3">
+              Audience
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-56 z-50 bg-white" side="bottom">
+            {audienceOptions.map(opt => (
+              <label className="flex gap-2 mb-2 cursor-pointer items-center" key={opt}>
+                <Checkbox
+                  checked={filters.audience.includes(opt)}
+                  onCheckedChange={() => handleCheckbox("audience", opt)}
+                />
+                <span>{opt}</span>
+              </label>
+            ))}
+          </PopoverContent>
+        </Popover>
         
         {/* Clear Filters Button */}
         <Button 
@@ -230,3 +254,4 @@ export default function GameFilterPanel({
     </div>
   );
 }
+

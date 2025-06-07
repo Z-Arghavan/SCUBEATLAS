@@ -533,7 +533,8 @@ export default function Index() {
     category: "",
     technology: [],
     age: [],
-    purpose: []
+    purpose: [],
+    audience: []
   });
   const [search, setSearch] = useState("");
   const [listMode, setListMode] = useState<"grid" | "list">("grid");
@@ -557,6 +558,13 @@ export default function Index() {
     if (filters.technology.length && !filters.technology.some(t => game.technology.includes(t))) return false;
     if (filters.age.length && !filters.age.some(a => game.age.includes(a))) return false;
     if (filters.purpose.length && !filters.purpose.some(p => game.purpose.includes(p))) return false;
+    
+    // Audience filter - for now, we'll just allow all games through since we don't have audience data in the JSON
+    // This can be updated when audience data is added to the game objects
+    if (filters.audience.length) {
+      // Currently no audience filtering logic since the data doesn't contain audience field
+      // This is a placeholder for when audience data is available
+    }
 
     // Keyword search
     if (search.trim() !== "") {
@@ -575,7 +583,7 @@ export default function Index() {
         value
       } = ev.detail || {};
       if (!field || !value) return;
-      if (["technology", "age", "purpose"].includes(field)) {
+      if (["technology", "age", "purpose", "audience"].includes(field)) {
         setFilters(f => ({
           ...f,
           [field]: [value]
