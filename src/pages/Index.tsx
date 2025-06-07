@@ -159,6 +159,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 12,
@@ -169,6 +170,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 13,
@@ -179,6 +181,7 @@ const realGames: GameData[] = [{
   technology: ["PC", "XR"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 14,
@@ -189,6 +192,7 @@ const realGames: GameData[] = [{
   technology: ["PC", "XR"],
   age: ["Adults"],
   purpose: ["Persuasion", "Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 15,
@@ -199,6 +203,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 16,
@@ -209,6 +214,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Pedagogy", "Participation"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 17,
@@ -219,6 +225,7 @@ const realGames: GameData[] = [{
   technology: ["Physical"],
   age: ["Adults"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 18,
@@ -229,6 +236,7 @@ const realGames: GameData[] = [{
   technology: ["PC", "XR"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 19,
@@ -239,6 +247,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Pedagogy", "Persuasion"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 20,
@@ -249,6 +258,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 21,
@@ -259,6 +269,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 22,
@@ -269,6 +280,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 23,
@@ -279,6 +291,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 24,
@@ -289,6 +302,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 25,
@@ -299,6 +313,7 @@ const realGames: GameData[] = [{
   technology: ["Physical"],
   age: ["Adults"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 26,
@@ -309,6 +324,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 27,
@@ -319,6 +335,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 28,
@@ -329,6 +346,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 29,
@@ -339,6 +357,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 30,
@@ -349,6 +368,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 31,
@@ -359,6 +379,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 32,
@@ -369,6 +390,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 33,
@@ -379,6 +401,7 @@ const realGames: GameData[] = [{
   technology: ["PC", "XR"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 34,
@@ -389,6 +412,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 35,
@@ -399,6 +423,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 36,
@@ -409,6 +434,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 37,
@@ -419,6 +445,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 38,
@@ -429,6 +456,7 @@ const realGames: GameData[] = [{
   technology: ["Physical"],
   age: ["Adults"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 39,
@@ -439,6 +467,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 40,
@@ -449,6 +478,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 41,
@@ -459,6 +489,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Pedagogy", "Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 42,
@@ -469,6 +500,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 43,
@@ -479,6 +511,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 44,
@@ -489,6 +522,7 @@ const realGames: GameData[] = [{
   technology: ["Physical"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 45,
@@ -499,6 +533,7 @@ const realGames: GameData[] = [{
   technology: ["Hybrid"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 46,
@@ -509,6 +544,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 47,
@@ -519,6 +555,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 48,
@@ -529,6 +566,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 49,
@@ -539,6 +577,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 50,
@@ -549,8 +588,10 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Persuasion"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }];
+
 function uniqueValuesFor(games: GameData[], field: keyof GameData): string[] {
   const set = new Set<string>();
   games.forEach(g => {
