@@ -18,6 +18,7 @@ export interface GameData {
   technology: string[];
   age: string[];
   purpose: string[];
+  audience: string[];
   link?: string;
 }
 
@@ -105,6 +106,16 @@ export default function GameCard({ game, onMore, viewMode = "grid" }: GameCardPr
               aria-label={"Filter by age " + a}
             >
               {a}
+            </button>
+          ))}
+          {game.audience.map(audience => (
+            <button
+              key={audience}
+              className="bg-pink-50 text-pink-700 px-2 py-0.5 rounded text-xs hover:bg-pink-100 focus:outline-none"
+              onClick={() => handleFilter("audience", audience)}
+              aria-label={"Filter by audience " + audience}
+            >
+              {audience}
             </button>
           ))}
         </div>

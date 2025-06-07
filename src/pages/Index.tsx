@@ -9,6 +9,36 @@ import Footer from "@/components/Footer";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Mapping for audience codes to user-friendly labels
+const audienceMapping: Record<string, string> = {
+  "S": "Students",
+  "s": "Students", 
+  "B": "Business Professionals",
+  "b": "Business Professionals",
+  "G": "General Public",
+  "g": "General Public"
+};
+
+// Helper function to parse audience from JSON data
+function parseAudience(audienceData: any): string[] {
+  if (!audienceData) return [];
+  
+  // If it's already an array, process each item
+  if (Array.isArray(audienceData)) {
+    return audienceData.map(item => audienceMapping[item] || item).filter(Boolean);
+  }
+  
+  // If it's a string, split by common delimiters and map
+  if (typeof audienceData === 'string') {
+    return audienceData
+      .split(/[\/,\s]+/)
+      .map(code => audienceMapping[code.trim()] || code.trim())
+      .filter(Boolean);
+  }
+  
+  return [];
+}
+
 // Real games data from forRepo (1).json
 const realGames: GameData[] = [{
   id: 1,
@@ -19,6 +49,7 @@ const realGames: GameData[] = [{
   technology: ["PC", "XR"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 2,
@@ -29,6 +60,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 3,
@@ -39,6 +71,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 4,
@@ -49,6 +82,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 5,
@@ -59,6 +93,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Pedagogy", "Participation"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 6,
@@ -69,6 +104,7 @@ const realGames: GameData[] = [{
   technology: ["PC"],
   age: ["Children"],
   purpose: ["Pedagogy"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 7,
@@ -79,6 +115,7 @@ const realGames: GameData[] = [{
   technology: ["PC", "XR"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 8,
@@ -89,6 +126,7 @@ const realGames: GameData[] = [{
   technology: ["PC", "Physical"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("B"), // Business Professionals
   link: ""
 }, {
   id: 9,
@@ -99,6 +137,7 @@ const realGames: GameData[] = [{
   technology: ["Hybrid"],
   age: ["Children"],
   purpose: ["Pedagogy", "Persuasion"],
+  audience: parseAudience("S"), // Students
   link: ""
 }, {
   id: 10,
@@ -109,6 +148,7 @@ const realGames: GameData[] = [{
   technology: ["XR"],
   age: ["Adults"],
   purpose: ["Participation"],
+  audience: parseAudience("G"), // General Public
   link: ""
 }, {
   id: 11,
@@ -559,16 +599,12 @@ export default function Index() {
     if (filters.age.length && !filters.age.some(a => game.age.includes(a))) return false;
     if (filters.purpose.length && !filters.purpose.some(p => game.purpose.includes(p))) return false;
     
-    // Audience filter - for now, we'll just allow all games through since we don't have audience data in the JSON
-    // This can be updated when audience data is added to the game objects
-    if (filters.audience.length) {
-      // Currently no audience filtering logic since the data doesn't contain audience field
-      // This is a placeholder for when audience data is available
-    }
+    // Audience filter - now properly implemented
+    if (filters.audience.length && !filters.audience.some(a => game.audience.includes(a))) return false;
 
     // Keyword search
     if (search.trim() !== "") {
-      const flat = [game.title, game.description, game.year, game.category, game.technology.join(" "), game.age.join(" "), game.purpose.join(" ")].join(" ").toLowerCase();
+      const flat = [game.title, game.description, game.year, game.category, game.technology.join(" "), game.age.join(" "), game.purpose.join(" "), game.audience.join(" ")].join(" ").toLowerCase();
       return flat.includes(search.toLowerCase());
     }
     return true;
@@ -610,7 +646,7 @@ export default function Index() {
   return <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col items-stretch">
       <Header />
       <div className="max-w-7xl w-full mx-auto py-10 px-2 sm:px-4">
-        <h1 className="text-4xl font-bold mb-2 text-center text-primary">Atlas of Sustainable & Circular 
+        <h1 className="text-4xl font-bold mb-2 text-center text-primary">Atlas of Sustainable & Circular 
 Urban Built Environment Serious Games</h1>
         <p className="text-lg text-gray-500 mb-10 text-center max-w-[700px] mx-auto">
       </p>
@@ -631,6 +667,7 @@ Urban Built Environment Serious Games</h1>
                 {modal.technology.map(t => <span key={t} className="bg-yellow-50 text-yellow-800 px-2 py-0.5 rounded text-xs">{t}</span>)}
                 {modal.purpose.map(p => <span key={p} className="bg-purple-50 text-purple-800 px-2 py-0.5 rounded text-xs">{p}</span>)}
                 {modal.age.map(a => <span key={a} className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs">{a}</span>)}
+                {modal.audience.map(a => <span key={a} className="bg-pink-50 text-pink-700 px-2 py-0.5 rounded text-xs">{a}</span>)}
               </div>
               <DialogFooter>
                 {modal.link && <Button asChild variant="outline" className="w-full" aria-label={"External link to " + modal.title}>
