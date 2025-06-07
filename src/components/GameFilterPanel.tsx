@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Search, List, Grid2x2 } from "lucide-react";
+import { Search, List, Grid2x2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -20,12 +20,13 @@ const purposeOptions = [
 ];
 
 const categoryOptions = [
-  "Urban Planning",
-  "Architecture",
-  "Circular Economy",
-  "Climate",
-  "Sustainability",
-  "Other",
+  "Sustainable Community Engagement",
+  "Natural Hazards and Extreme Events",
+  "Urban Development and Planning",
+  "Energy Efficiency and Transition",
+  "Water Management",
+  "Waste and Resource Management",
+  "Construction and Architecture",
 ];
 
 interface GameFilterPanelProps {
@@ -72,6 +73,18 @@ export default function GameFilterPanel({
         [group]: [...arr, value],
       });
     }
+  }
+
+  // Clear all filters
+  function clearFilters() {
+    setFilters({
+      year: "",
+      category: "",
+      technology: [],
+      age: [],
+      purpose: [],
+    });
+    setSearch("");
   }
 
   return (
@@ -190,6 +203,17 @@ export default function GameFilterPanel({
             ))}
           </PopoverContent>
         </Popover>
+        
+        {/* Clear Filters Button */}
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={clearFilters}
+          className="px-3 flex items-center gap-1"
+        >
+          <X className="w-4 h-4" />
+          Clear
+        </Button>
       </div>
     </div>
   );
