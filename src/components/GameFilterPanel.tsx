@@ -21,6 +21,8 @@ const purposeOptions = [
 
 const audienceOptions = ["General Public", "Students", "Business Professionals"];
 
+const playerModeOptions = ["Single Player", "Multi Player", "Both"];
+
 // User-friendly category labels mapped to JSON categories
 const categoryOptions = [
   "Sustainable Community Engagement",
@@ -60,6 +62,7 @@ export interface Filters {
   age: string[];
   purpose: string[];
   audience: string[];
+  playerMode: string[];
 }
 
 export default function GameFilterPanel({
@@ -99,6 +102,7 @@ export default function GameFilterPanel({
       age: [],
       purpose: [],
       audience: [],
+      playerMode: [],
     });
     setSearch("");
   }
@@ -232,6 +236,25 @@ export default function GameFilterPanel({
                 <Checkbox
                   checked={filters.audience.includes(opt)}
                   onCheckedChange={() => handleCheckbox("audience", opt)}
+                />
+                <span>{opt}</span>
+              </label>
+            ))}
+          </PopoverContent>
+        </Popover>
+        {/* Player Mode */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" size="sm" className="px-3">
+              Player Mode
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-48 z-50 bg-white" side="bottom">
+            {playerModeOptions.map(opt => (
+              <label className="flex gap-2 mb-2 cursor-pointer items-center" key={opt}>
+                <Checkbox
+                  checked={filters.playerMode.includes(opt)}
+                  onCheckedChange={() => handleCheckbox("playerMode", opt)}
                 />
                 <span>{opt}</span>
               </label>
