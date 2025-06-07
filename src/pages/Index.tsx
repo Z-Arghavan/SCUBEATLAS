@@ -22,7 +22,15 @@ const audienceMapping: Record<string, string> = {
 // Mapping for player mode codes to user-friendly labels
 const playerModeMapping: Record<string, string> = {
   "B": "Both",
-  "b": "Both"
+  "b": "Both",
+  "M": "Multi Player",
+  "m": "Multi Player", 
+  "multi": "Multi Player",
+  "Multi": "Multi Player",
+  "S": "Single Player",
+  "s": "Single Player",
+  "single": "Single Player",
+  "solo": "Single Player"
 };
 
 // Helper function to parse audience from JSON data
