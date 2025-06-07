@@ -17,7 +17,7 @@ export default function Header() {
     <header className="bg-white border-b shadow-sm sticky top-0 z-40">
       <div className="max-w-7xl mx-auto flex gap-4 justify-between items-center px-4 py-3">
         <div className="flex items-center gap-4">
-          <span className="text-xl font-bold text-primary">Circular Atlas</span>
+          <span className="text-xl font-bold text-primary">SCUBE Atlas</span>
           <nav className="hidden sm:flex gap-2 ml-5">
             {navLinks.map((link) => (
               <Link
