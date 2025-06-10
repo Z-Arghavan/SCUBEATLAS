@@ -23,6 +23,10 @@ Work in progress
 We are publishing our results as two journal articles. In the meantime, you can have a sneakpeek of our systematic review:
 <img src="images/Breakdown of serious game analysis in sustainble and circular urban built environment.png">
 
+Submit your game!
+===================
+Go to the Issues and submit a new issue. Alternatively, do it via the webiste.
+
 Reference
 ===================
 Akbarieh, A., Han, Q., & Klippel, A. (in Review). Atlas of the Serious Games in the Urban Built Environment. 2nd GeoGame Symposium, Dublin, June 9–10, 2025.
