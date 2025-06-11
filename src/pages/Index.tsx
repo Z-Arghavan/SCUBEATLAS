@@ -105,7 +105,7 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
 }
 
 // Load data from the new JSON file
-import jsonData from '/forRepo_Data.json';
+import jsonData from '../forRepo_Data.json';
 
 // Convert the new format data to GameData format
 const realGames: GameData[] = jsonData.map(convertJsonToGameData);
