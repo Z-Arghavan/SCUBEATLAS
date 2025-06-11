@@ -163,12 +163,12 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Try different possible paths for the JSON file
-        const basePath = import.meta.env.PROD ? '/SCUBEATLAS' : '';
+        // GitHub Pages specific paths - try the most likely locations
         const possiblePaths = [
-          `${basePath}/forRepo_Data.json`,
-          './forRepo_Data.json',
-          '/forRepo_Data.json'
+          './forRepo_Data.json',  // Same directory as index.html
+          '/forRepo_Data.json',   // Root of domain
+          `${import.meta.env.BASE_URL}forRepo_Data.json`, // Using Vite's base URL
+          '/SCUBEATLAS/forRepo_Data.json' // GitHub Pages subfolder
         ];
         
         let response;
