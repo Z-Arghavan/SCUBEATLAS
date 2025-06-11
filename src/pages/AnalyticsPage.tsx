@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -146,7 +147,7 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
   };
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#FF6B6B', '#4ECDC4', '#45B7D1'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658'];
 
 const chartConfig = {
   count: {
@@ -162,11 +163,12 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Updated GitHub repository URLs - prioritize raw GitHub content
+        // GitHub Pages specific paths - try the most likely locations
         const possiblePaths = [
-          'https://raw.githubusercontent.com/Z-Arghavan/SCUBEATLAS/main/forRepo_Data.json',
-          './forRepo_Data.json',
-          '/forRepo_Data.json'
+          './forRepo_Data.json',  // Same directory as index.html
+          '/forRepo_Data.json',   // Root of domain
+          `${import.meta.env.BASE_URL}forRepo_Data.json`, // Using Vite's base URL
+          'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json' // Direct GitHub Pages URL
         ];
         
         let response;
@@ -188,25 +190,18 @@ export default function AnalyticsPage() {
         }
         
         if (!dataLoaded || !response?.ok) {
-          console.error(`Failed to load data from any path. Last status: ${response?.status || 'unknown'}`);
-          // Set empty games array to show empty state instead of loading forever
-          setGames([]);
-          setLoading(false);
-          return;
+          throw new Error(`Failed to load data from any path. Last status: ${response?.status || 'unknown'}`);
         }
         
         const text = await response.text();
-        console.log('Raw response length:', text.length);
         const cleanText = text.replace(/\bNaN\b/g, 'null');
         const jsonData = JSON.parse(cleanText);
-        console.log('Parsed JSON data length:', jsonData.length);
         const convertedGames = jsonData.map(convertJsonToGameData);
-        console.log('Converted games:', convertedGames.length);
+        console.log('Loaded games:', convertedGames.length);
         setGames(convertedGames);
         setLoading(false);
       } catch (error) {
         console.error('Error loading game data:', error);
-        setGames([]);
         setLoading(false);
       }
     };
@@ -226,21 +221,6 @@ export default function AnalyticsPage() {
     );
   }
 
-  if (games.length === 0) {
-    return (
-      <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
-        <Header />
-        <div className="flex-1 flex justify-center items-center">
-          <div className="text-center">
-            <div className="text-lg text-gray-500 mb-2">No data available</div>
-            <div className="text-sm text-gray-400">Unable to load analytics data. Please check the data source.</div>
-          </div>
-        </div>
-        <Footer />
-      </main>
-    );
-  }
-
   // Calculate statistics
   const totalGames = games.length;
   
@@ -250,15 +230,11 @@ export default function AnalyticsPage() {
     return acc;
   }, {} as Record<string, number>);
 
-  const categoryChartData = Object.entries(categoryData).map(([category, count], index) => ({
-    id: `category-${index}`,
+  const categoryChartData = Object.entries(categoryData).map(([category, count]) => ({
     category: category.length > 20 ? category.substring(0, 20) + '...' : category,
     fullCategory: category,
-    count,
-    fill: COLORS[index % COLORS.length]
+    count
   }));
-
-  console.log('Category chart data:', categoryChartData);
 
   // Year trends
   const yearData = games.reduce((acc, game) => {
@@ -280,10 +256,9 @@ export default function AnalyticsPage() {
     return acc;
   }, {} as Record<string, number>);
 
-  const technologyChartData = Object.entries(technologyData).map(([technology, count], index) => ({
+  const technologyChartData = Object.entries(technologyData).map(([technology, count]) => ({
     technology,
-    count,
-    fill: COLORS[index % COLORS.length]
+    count
   }));
 
   // Purpose distribution
@@ -294,14 +269,10 @@ export default function AnalyticsPage() {
     return acc;
   }, {} as Record<string, number>);
 
-  const purposeChartData = Object.entries(purposeData).map(([purpose, count], index) => ({
-    id: `purpose-${index}`,
+  const purposeChartData = Object.entries(purposeData).map(([purpose, count]) => ({
     purpose,
-    count,
-    fill: COLORS[index % COLORS.length]
+    count
   }));
-
-  console.log('Purpose chart data:', purposeChartData);
 
   // Purpose to Theme (Category) flow data for Sankey-like visualization
   const purposeToThemeData = games.reduce((acc, game) => {
@@ -316,7 +287,7 @@ export default function AnalyticsPage() {
     .map(([flow, count], index) => {
       const [purpose, theme] = flow.split(' → ');
       return { 
-        id: `sankey-${index}`,
+        id: `sankey-${index}`, // Add unique ID
         flow, 
         purpose, 
         theme, 
@@ -324,7 +295,7 @@ export default function AnalyticsPage() {
       };
     })
     .sort((a, b) => b.count - a.count)
-    .slice(0, 15);
+    .slice(0, 15); // Show top 15 flows
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
@@ -413,7 +384,7 @@ export default function AnalyticsPage() {
                         return null;
                       }}
                     />
-                    <Bar dataKey="count" fill="#0088FE" />
+                    <Bar dataKey="count" fill="var(--color-count)" />
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
@@ -430,27 +401,20 @@ export default function AnalyticsPage() {
               <CardDescription>Distribution of games across different sustainability categories</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80">
+              <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart 
-                    data={categoryChartData} 
-                    layout="horizontal" 
-                    margin={{ top: 5, right: 30, left: 120, bottom: 5 }}
-                  >
+                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" fontSize={10} />
-                    <YAxis 
-                      type="category"
+                    <XAxis 
                       dataKey="category" 
                       fontSize={10}
-                      width={110}
+                      angle={-45}
+                      textAnchor="end"
+                      height={60}
                     />
+                    <YAxis fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count">
-                      {categoryChartData.map((entry) => (
-                        <Cell key={entry.id} fill={entry.fill} />
-                      ))}
-                    </Bar>
+                    <Bar dataKey="count" fill="var(--color-count)" />
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
@@ -464,7 +428,7 @@ export default function AnalyticsPage() {
               <CardDescription>Timeline showing the number of games published each year</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80">
+              <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={yearChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -485,7 +449,7 @@ export default function AnalyticsPage() {
               <CardDescription>Types of technology platforms used in the games</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80">
+              <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -494,12 +458,12 @@ export default function AnalyticsPage() {
                       cy="50%"
                       labelLine={false}
                       label={({ technology, percent }) => `${technology} ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={80}
+                      outerRadius={60}
                       fill="#8884d8"
                       dataKey="count"
                     >
                       {technologyChartData.map((entry, index) => (
-                        <Cell key={`tech-cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
                     <ChartTooltip content={<ChartTooltipContent />} />
@@ -516,27 +480,14 @@ export default function AnalyticsPage() {
               <CardDescription>Educational purposes and goals of the games</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80">
+              <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart 
-                    data={purposeChartData} 
-                    layout="horizontal" 
-                    margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
-                  >
+                  <BarChart data={purposeChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" fontSize={10} />
-                    <YAxis 
-                      type="category"
-                      dataKey="purpose" 
-                      fontSize={10}
-                      width={70}
-                    />
+                    <XAxis dataKey="purpose" fontSize={10} />
+                    <YAxis fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count">
-                      {purposeChartData.map((entry) => (
-                        <Cell key={entry.id} fill={entry.fill} />
-                      ))}
-                    </Bar>
+                    <Bar dataKey="count" fill="var(--color-count)" />
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
