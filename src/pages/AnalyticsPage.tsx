@@ -300,39 +300,39 @@ export default function AnalyticsPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
       <Header />
-      <div className="flex-1 max-w-7xl w-full mx-auto py-10 px-4">
+      <div className="flex-1 max-w-7xl w-full mx-auto py-6 px-4">
         <h1 className="text-3xl font-bold mb-2 text-center text-primary">
           Serious Games Analytics Dashboard
         </h1>
-        <p className="text-lg text-gray-500 mb-8 text-center">
+        <p className="text-lg text-gray-500 mb-6 text-center">
           Insights and trends from the sustainable urban development games database
         </p>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Total Games</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Total Games</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">{totalGames}</div>
+            <CardContent className="pt-0">
+              <div className="text-2xl font-bold text-primary">{totalGames}</div>
             </CardContent>
           </Card>
           
           <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Categories</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Categories</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">{Object.keys(categoryData).length}</div>
+            <CardContent className="pt-0">
+              <div className="text-2xl font-bold text-primary">{Object.keys(categoryData).length}</div>
             </CardContent>
           </Card>
           
           <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Year Range</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Year Range</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-0">
               <div className="text-lg font-bold text-primary">
                 {Math.min(...games.filter(g => g.year !== "Unknown").map(g => Number(g.year)))} - {Math.max(...games.filter(g => g.year !== "Unknown").map(g => Number(g.year)))}
               </div>
@@ -340,33 +340,33 @@ export default function AnalyticsPage() {
           </Card>
           
           <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Technologies</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Technologies</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">{Object.keys(technologyData).length}</div>
+            <CardContent className="pt-0">
+              <div className="text-2xl font-bold text-primary">{Object.keys(technologyData).length}</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Purpose to Theme Flow */}
-        <div className="mb-8">
+        <div className="mb-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Purpose to Theme Flow</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Purpose to Theme Flow</CardTitle>
               <CardDescription>How educational purposes connect to sustainability themes (top connections)</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-96">
+              <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={sankeyData} layout="horizontal">
+                  <BarChart data={sankeyData} layout="horizontal" margin={{ top: 5, right: 30, left: 150, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" />
                     <YAxis 
                       type="category" 
                       dataKey="flow" 
-                      fontSize={11}
-                      width={200}
+                      fontSize={10}
+                      width={140}
                     />
                     <ChartTooltip 
                       content={({ active, payload }) => {
@@ -393,26 +393,26 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {/* Games by Category */}
           <Card>
-            <CardHeader>
-              <CardTitle>Games by Category</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Games by Category</CardTitle>
               <CardDescription>Distribution of games across different sustainability categories</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80">
+              <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryChartData}>
+                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="category" 
-                      fontSize={12}
+                      fontSize={10}
                       angle={-45}
                       textAnchor="end"
-                      height={80}
+                      height={60}
                     />
-                    <YAxis />
+                    <YAxis fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="count" fill="var(--color-count)" />
                   </BarChart>
@@ -423,17 +423,17 @@ export default function AnalyticsPage() {
 
           {/* Games by Year */}
           <Card>
-            <CardHeader>
-              <CardTitle>Games by Year</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Games by Year</CardTitle>
               <CardDescription>Timeline showing the number of games published each year</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80">
+              <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={yearChartData}>
+                  <LineChart data={yearChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="year" />
-                    <YAxis />
+                    <XAxis dataKey="year" fontSize={10} />
+                    <YAxis fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Line type="monotone" dataKey="count" stroke="var(--color-count)" strokeWidth={2} />
                   </LineChart>
@@ -444,12 +444,12 @@ export default function AnalyticsPage() {
 
           {/* Technology Distribution */}
           <Card>
-            <CardHeader>
-              <CardTitle>Technology Distribution</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Technology Distribution</CardTitle>
               <CardDescription>Types of technology platforms used in the games</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80">
+              <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -458,7 +458,7 @@ export default function AnalyticsPage() {
                       cy="50%"
                       labelLine={false}
                       label={({ technology, percent }) => `${technology} ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={80}
+                      outerRadius={60}
                       fill="#8884d8"
                       dataKey="count"
                     >
@@ -475,17 +475,17 @@ export default function AnalyticsPage() {
 
           {/* Purpose Distribution */}
           <Card>
-            <CardHeader>
-              <CardTitle>Game Purpose Distribution</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Game Purpose Distribution</CardTitle>
               <CardDescription>Educational purposes and goals of the games</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80">
+              <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={purposeChartData}>
+                  <BarChart data={purposeChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="purpose" fontSize={12} />
-                    <YAxis />
+                    <XAxis dataKey="purpose" fontSize={10} />
+                    <YAxis fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="count" fill="var(--color-count)" />
                   </BarChart>
