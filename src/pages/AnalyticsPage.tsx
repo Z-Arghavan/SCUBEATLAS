@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -415,7 +416,11 @@ export default function AnalyticsPage() {
                       width={110}
                     />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count" fill={(entry) => entry.fill} />
+                    <Bar dataKey="count">
+                      {categoryChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                      ))}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
@@ -493,7 +498,11 @@ export default function AnalyticsPage() {
                       width={70}
                     />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count" fill={(entry) => entry.fill} />
+                    <Bar dataKey="count">
+                      {purposeChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                      ))}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
