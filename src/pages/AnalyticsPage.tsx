@@ -162,10 +162,9 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Updated GitHub repository URLs
+        // Updated GitHub repository URLs - prioritize raw GitHub content
         const possiblePaths = [
           'https://raw.githubusercontent.com/Z-Arghavan/SCUBEATLAS/main/forRepo_Data.json',
-          'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json',
           './forRepo_Data.json',
           '/forRepo_Data.json'
         ];
