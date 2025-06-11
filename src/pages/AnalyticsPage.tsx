@@ -231,11 +231,14 @@ export default function AnalyticsPage() {
   }, {} as Record<string, number>);
 
   const categoryChartData = Object.entries(categoryData).map(([category, count], index) => ({
+    id: `category-${index}`,
     category: category.length > 20 ? category.substring(0, 20) + '...' : category,
     fullCategory: category,
     count,
     fill: COLORS[index % COLORS.length]
   }));
+
+  console.log('Category chart data:', categoryChartData);
 
   // Year trends
   const yearData = games.reduce((acc, game) => {
@@ -272,10 +275,13 @@ export default function AnalyticsPage() {
   }, {} as Record<string, number>);
 
   const purposeChartData = Object.entries(purposeData).map(([purpose, count], index) => ({
+    id: `purpose-${index}`,
     purpose,
     count,
     fill: COLORS[index % COLORS.length]
   }));
+
+  console.log('Purpose chart data:', purposeChartData);
 
   // Purpose to Theme (Category) flow data for Sankey-like visualization
   const purposeToThemeData = games.reduce((acc, game) => {
@@ -290,7 +296,7 @@ export default function AnalyticsPage() {
     .map(([flow, count], index) => {
       const [purpose, theme] = flow.split(' → ');
       return { 
-        id: `sankey-${index}`, // Add unique ID
+        id: `sankey-${index}`,
         flow, 
         purpose, 
         theme, 
@@ -298,7 +304,7 @@ export default function AnalyticsPage() {
       };
     })
     .sort((a, b) => b.count - a.count)
-    .slice(0, 15); // Show top 15 flows
+    .slice(0, 15);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
@@ -406,7 +412,11 @@ export default function AnalyticsPage() {
             <CardContent>
               <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryChartData} layout="horizontal" margin={{ top: 5, right: 30, left: 120, bottom: 5 }}>
+                  <BarChart 
+                    data={categoryChartData} 
+                    layout="horizontal" 
+                    margin={{ top: 5, right: 30, left: 120, bottom: 5 }}
+                  >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" fontSize={10} />
                     <YAxis 
@@ -418,7 +428,7 @@ export default function AnalyticsPage() {
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="count">
                       {categoryChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                        <Cell key={entry.id} fill={entry.fill} />
                       ))}
                     </Bar>
                   </BarChart>
@@ -469,7 +479,7 @@ export default function AnalyticsPage() {
                       dataKey="count"
                     >
                       {technologyChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell key={`tech-cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
                     <ChartTooltip content={<ChartTooltipContent />} />
@@ -488,7 +498,11 @@ export default function AnalyticsPage() {
             <CardContent>
               <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={purposeChartData} layout="horizontal" margin={{ top: 5, right: 30, left: 80, bottom: 5 }}>
+                  <BarChart 
+                    data={purposeChartData} 
+                    layout="horizontal" 
+                    margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
+                  >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" fontSize={10} />
                     <YAxis 
@@ -500,7 +514,7 @@ export default function AnalyticsPage() {
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="count">
                       {purposeChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                        <Cell key={entry.id} fill={entry.fill} />
                       ))}
                     </Bar>
                   </BarChart>
