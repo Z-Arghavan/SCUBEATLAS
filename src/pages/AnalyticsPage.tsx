@@ -164,17 +164,35 @@ export default function AnalyticsPage() {
     const loadData = async () => {
       try {
         // Try different possible paths for the JSON file
+        const basePath = import.meta.env.PROD ? '/SCUBEATLAS' : '';
+        const possiblePaths = [
+          `${basePath}/forRepo_Data.json`,
+          './forRepo_Data.json',
+          '/forRepo_Data.json'
+        ];
+        
         let response;
-        try {
-          response = await fetch('/forRepo_Data.json');
-        } catch (error) {
-          console.log('Trying alternative path...');
-          response = await fetch('./forRepo_Data.json');
+        let dataLoaded = false;
+        
+        for (const path of possiblePaths) {
+          try {
+            console.log('Trying to fetch from:', path);
+            response = await fetch(path);
+            if (response.ok) {
+              console.log('Successfully loaded from:', path);
+              dataLoaded = true;
+              break;
+            }
+          } catch (error) {
+            console.log('Failed to fetch from:', path, error);
+            continue;
+          }
         }
         
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (!dataLoaded || !response?.ok) {
+          throw new Error(`Failed to load data from any path. Last status: ${response?.status || 'unknown'}`);
         }
+        
         const text = await response.text();
         const cleanText = text.replace(/\bNaN\b/g, 'null');
         const jsonData = JSON.parse(cleanText);
