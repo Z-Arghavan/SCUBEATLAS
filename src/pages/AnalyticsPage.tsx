@@ -163,12 +163,13 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // GitHub Pages specific paths - try the most likely locations
+        // GitHub Pages optimized paths
+        const baseUrl = import.meta.env.PROD ? '/SCUBEATLAS' : '';
         const possiblePaths = [
-          './forRepo_Data.json',  // Same directory as index.html
-          '/forRepo_Data.json',   // Root of domain
-          `${import.meta.env.BASE_URL}forRepo_Data.json`, // Using Vite's base URL
-          'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json' // Direct GitHub Pages URL
+          `${baseUrl}/forRepo_Data.json`,
+          './forRepo_Data.json',
+          '/forRepo_Data.json',
+          'https://raw.githubusercontent.com/z-arghavan/SCUBEATLAS/main/forRepo_Data.json'
         ];
         
         let response;
@@ -190,18 +191,25 @@ export default function AnalyticsPage() {
         }
         
         if (!dataLoaded || !response?.ok) {
-          throw new Error(`Failed to load data from any path. Last status: ${response?.status || 'unknown'}`);
+          console.error(`Failed to load data from any path. Last status: ${response?.status || 'unknown'}`);
+          // Set empty games array to show empty state instead of loading forever
+          setGames([]);
+          setLoading(false);
+          return;
         }
         
         const text = await response.text();
+        console.log('Raw response length:', text.length);
         const cleanText = text.replace(/\bNaN\b/g, 'null');
         const jsonData = JSON.parse(cleanText);
+        console.log('Parsed JSON data length:', jsonData.length);
         const convertedGames = jsonData.map(convertJsonToGameData);
-        console.log('Loaded games:', convertedGames.length);
+        console.log('Converted games:', convertedGames.length);
         setGames(convertedGames);
         setLoading(false);
       } catch (error) {
         console.error('Error loading game data:', error);
+        setGames([]);
         setLoading(false);
       }
     };
@@ -215,6 +223,21 @@ export default function AnalyticsPage() {
         <Header />
         <div className="flex-1 flex justify-center items-center">
           <div className="text-lg text-gray-500">Loading analytics...</div>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
+  if (games.length === 0) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
+        <Header />
+        <div className="flex-1 flex justify-center items-center">
+          <div className="text-center">
+            <div className="text-lg text-gray-500 mb-2">No data available</div>
+            <div className="text-sm text-gray-400">Unable to load analytics data. Please check the data source.</div>
+          </div>
         </div>
         <Footer />
       </main>
@@ -427,7 +450,7 @@ export default function AnalyticsPage() {
                     />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="count">
-                      {categoryChartData.map((entry, index) => (
+                      {categoryChartData.map((entry) => (
                         <Cell key={entry.id} fill={entry.fill} />
                       ))}
                     </Bar>
@@ -513,7 +536,7 @@ export default function AnalyticsPage() {
                     />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="count">
-                      {purposeChartData.map((entry, index) => (
+                      {purposeChartData.map((entry) => (
                         <Cell key={entry.id} fill={entry.fill} />
                       ))}
                     </Bar>
