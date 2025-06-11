@@ -104,24 +104,11 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
   };
 }
 
-// Sample data using your new format - replace this with your actual JSON data
-const sampleNewFormatData = [{
-  "Title": "Co-De|GT: The Gamification and Tokenisation of More-Than-Human Qualities and Values",
-  "Year": 2022.0,
-  "Type (SG, GS, R)": "GS",
-  "Pe/Pu/Pa": "Pa",
-  "GameName": "Co-De|GT",
-  "On/Off-line": "N",
-  "Multi/single/Both player": "S",
-  "Child/Adult": "A",
-  "Student/Business/GeneralPublic": "G",
-  "category": "Urban Development and Planning",
-  "Description": "A gamified system that tokenizes environmental qualities and values for participatory urban development.",
-  "PC/mobile": "Multi-platform"
-}];
+// Load data from the new JSON file
+import jsonData from '/forRepo_Data.json';
 
 // Convert the new format data to GameData format
-const realGames: GameData[] = sampleNewFormatData.map(convertJsonToGameData);
+const realGames: GameData[] = jsonData.map(convertJsonToGameData);
 
 function uniqueValuesFor(games: GameData[], field: keyof GameData): string[] {
   const set = new Set<string>();
