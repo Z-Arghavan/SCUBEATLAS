@@ -96,7 +96,14 @@ function parseTechnology(techData: any): string[] {
   
   // Handle hybrid cases first (combinations with boardgame)
   if ((tech.includes('boardgame') || tech.includes('board game')) && (tech.includes('pc') || tech.includes('mobile') || tech.includes('ar') || tech.includes('vr') || tech.includes('m'))) {
-    return ["Hybrid"];
+    // Return both Hybrid and the individual components so they show up in both filters
+    const components = [];
+    if (tech.includes('pc')) components.push("Digital");
+    if (tech.includes('mobile') || tech.includes('m')) components.push("Digital");
+    if (tech.includes('ar') || tech.includes('vr')) components.push("Virtual Reality (XR)");
+    components.push("Physical"); // Always add Physical for boardgame hybrids
+    components.push("Hybrid");
+    return [...new Set(components)]; // Remove duplicates
   }
   
   // Handle physical games - check for various formats
