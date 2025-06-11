@@ -66,7 +66,15 @@ function parsePurpose(purposeData: any): string[] {
   
   // Handle multiple purposes separated by /
   if (typeof purposeData === 'string' && purposeData.includes('/')) {
-    return purposeData.split('/').map(p => purposeMapping[p.trim()]).filter(Boolean);
+    const parts = purposeData.split('/').map(p => p.trim());
+    const mappedParts = parts.map(p => purposeMapping[p]).filter(Boolean);
+    
+    // Return individual purposes plus their combination
+    const result = [...mappedParts];
+    if (mappedParts.length > 1) {
+      result.push(mappedParts.join(' & '));
+    }
+    return result;
   }
   
   const mapped = purposeMapping[purposeData];
