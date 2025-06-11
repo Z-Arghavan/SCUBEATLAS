@@ -168,7 +168,7 @@ export default function AnalyticsPage() {
           './forRepo_Data.json',  // Same directory as index.html
           '/forRepo_Data.json',   // Root of domain
           `${import.meta.env.BASE_URL}forRepo_Data.json`, // Using Vite's base URL
-          '/SCUBEATLAS/forRepo_Data.json' // GitHub Pages subfolder
+          'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json' // Direct GitHub Pages URL
         ];
         
         let response;
