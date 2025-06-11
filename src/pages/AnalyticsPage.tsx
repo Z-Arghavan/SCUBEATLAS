@@ -247,6 +247,23 @@ export default function AnalyticsPage() {
     count
   }));
 
+  // Purpose to Theme (Category) flow data for Sankey-like visualization
+  const purposeToThemeData = games.reduce((acc, game) => {
+    game.purpose.forEach(purpose => {
+      const key = `${purpose} → ${game.category}`;
+      acc[key] = (acc[key] || 0) + 1;
+    });
+    return acc;
+  }, {} as Record<string, number>);
+
+  const sankeyData = Object.entries(purposeToThemeData)
+    .map(([flow, count]) => {
+      const [purpose, theme] = flow.split(' → ');
+      return { flow, purpose, theme, count };
+    })
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 15); // Show top 15 flows
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
       <Header />
@@ -295,6 +312,49 @@ export default function AnalyticsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-primary">{Object.keys(technologyData).length}</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Purpose to Theme Flow */}
+        <div className="mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Purpose to Theme Flow</CardTitle>
+              <CardDescription>How educational purposes connect to sustainability themes (top connections)</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig} className="h-96">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={sankeyData} layout="horizontal">
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis 
+                      type="category" 
+                      dataKey="flow" 
+                      fontSize={11}
+                      width={200}
+                    />
+                    <ChartTooltip 
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          const data = payload[0].payload;
+                          return (
+                            <div className="bg-background border rounded-lg p-3 shadow-lg">
+                              <p className="font-semibold">{data.purpose}</p>
+                              <p className="text-sm text-muted-foreground">↓</p>
+                              <p className="font-semibold">{data.theme}</p>
+                              <p className="text-sm">Games: {data.count}</p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Bar dataKey="count" fill="var(--color-count)" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
             </CardContent>
           </Card>
         </div>
