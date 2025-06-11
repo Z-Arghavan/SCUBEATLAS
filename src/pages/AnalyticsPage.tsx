@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -147,7 +146,7 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
   };
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#FF6B6B', '#4ECDC4', '#45B7D1'];
 
 const chartConfig = {
   count: {
@@ -230,10 +229,11 @@ export default function AnalyticsPage() {
     return acc;
   }, {} as Record<string, number>);
 
-  const categoryChartData = Object.entries(categoryData).map(([category, count]) => ({
+  const categoryChartData = Object.entries(categoryData).map(([category, count], index) => ({
     category: category.length > 20 ? category.substring(0, 20) + '...' : category,
     fullCategory: category,
-    count
+    count,
+    fill: COLORS[index % COLORS.length]
   }));
 
   // Year trends
@@ -256,9 +256,10 @@ export default function AnalyticsPage() {
     return acc;
   }, {} as Record<string, number>);
 
-  const technologyChartData = Object.entries(technologyData).map(([technology, count]) => ({
+  const technologyChartData = Object.entries(technologyData).map(([technology, count], index) => ({
     technology,
-    count
+    count,
+    fill: COLORS[index % COLORS.length]
   }));
 
   // Purpose distribution
@@ -269,9 +270,10 @@ export default function AnalyticsPage() {
     return acc;
   }, {} as Record<string, number>);
 
-  const purposeChartData = Object.entries(purposeData).map(([purpose, count]) => ({
+  const purposeChartData = Object.entries(purposeData).map(([purpose, count], index) => ({
     purpose,
-    count
+    count,
+    fill: COLORS[index % COLORS.length]
   }));
 
   // Purpose to Theme (Category) flow data for Sankey-like visualization
@@ -384,7 +386,7 @@ export default function AnalyticsPage() {
                         return null;
                       }}
                     />
-                    <Bar dataKey="count" fill="var(--color-count)" />
+                    <Bar dataKey="count" fill="#0088FE" />
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
@@ -401,20 +403,19 @@ export default function AnalyticsPage() {
               <CardDescription>Distribution of games across different sustainability categories</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-64">
+              <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
+                  <BarChart data={categoryChartData} layout="horizontal" margin={{ top: 5, right: 30, left: 120, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
+                    <XAxis type="number" fontSize={10} />
+                    <YAxis 
+                      type="category"
                       dataKey="category" 
                       fontSize={10}
-                      angle={-45}
-                      textAnchor="end"
-                      height={60}
+                      width={110}
                     />
-                    <YAxis fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count" fill="var(--color-count)" />
+                    <Bar dataKey="count" fill={(entry) => entry.fill} />
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
@@ -428,7 +429,7 @@ export default function AnalyticsPage() {
               <CardDescription>Timeline showing the number of games published each year</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-64">
+              <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={yearChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -449,7 +450,7 @@ export default function AnalyticsPage() {
               <CardDescription>Types of technology platforms used in the games</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-64">
+              <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -458,7 +459,7 @@ export default function AnalyticsPage() {
                       cy="50%"
                       labelLine={false}
                       label={({ technology, percent }) => `${technology} ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={60}
+                      outerRadius={80}
                       fill="#8884d8"
                       dataKey="count"
                     >
@@ -480,14 +481,19 @@ export default function AnalyticsPage() {
               <CardDescription>Educational purposes and goals of the games</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-64">
+              <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={purposeChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <BarChart data={purposeChartData} layout="horizontal" margin={{ top: 5, right: 30, left: 80, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="purpose" fontSize={10} />
-                    <YAxis fontSize={10} />
+                    <XAxis type="number" fontSize={10} />
+                    <YAxis 
+                      type="category"
+                      dataKey="purpose" 
+                      fontSize={10}
+                      width={70}
+                    />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count" fill="var(--color-count)" />
+                    <Bar dataKey="count" fill={(entry) => entry.fill} />
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
