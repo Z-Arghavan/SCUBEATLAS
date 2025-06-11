@@ -68,14 +68,15 @@ function normalizeCategory(category: string): string {
   const cleaned = cleanText(category);
   console.log('Original category:', category, '-> Cleaned category:', cleaned);
   
-  // Map common variations to the exact filter dropdown categories
+  // Map the exact categories from JSON to filter categories
   const categoryMap: Record<string, string> = {
-    "Green": "Energy Efficiency and Transition",
-    "Circular Economy": "Circular Economy",
-    "Construction": "Construction", 
-    "Water": "Water",
-    "Urban Development": "Urban Development",
-    "Natural Hazards": "Natural Hazards"
+    "Urban Development and Planning": "Urban Development and Planning",
+    "Energy Efficiency and Transition": "Energy Efficiency and Transition",
+    "Natural Hazards and Extreme Events": "Natural Hazards and Extreme Events",
+    "Water Management": "Water Management", 
+    "Waste and Resource Management": "Waste and Resource Management",
+    "Sustainable Community Engagement": "Sustainable Community Engagement",
+    "Construction and Design": "Construction and Design",
   };
   
   const result = categoryMap[cleaned] || "General Sustainable Development";

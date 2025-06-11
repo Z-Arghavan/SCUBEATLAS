@@ -22,26 +22,27 @@ const audienceOptions = ["General Public", "Students", "Business Professionals"]
 
 const playerModeOptions = ["Single Player", "Multi Player", "Both"];
 
-// Category options exactly as they should appear in the filter and be used throughout
+// Category options exactly as they appear in the JSON data
 const categoryOptions = [
   "General Sustainable Development",
-  "Natural Hazards",
-  "Urban Development", 
-  "Energy Efficiency and Transition",
-  "Water",
-  "Circular Economy",
-  "Construction",
+  "Urban Development and Planning",
+  "Energy Efficiency and Transition", 
+  "Natural Hazards and Extreme Events",
+  "Water Management",
+  "Waste and Resource Management",
+  "Sustainable Community Engagement",
+  "Construction and Design",
 ];
 
-// Simplified mapping - direct mapping for exact matches
+// Direct mapping for exact matches from JSON to filter categories
 export const categoryMapping: Record<string, string> = {
-  "General Sustainable Development": "General Sustainable Development",
-  "Natural Hazards": "Natural Hazards",
-  "Urban Development": "Urban Development",
+  "Urban Development and Planning": "Urban Development and Planning",
   "Energy Efficiency and Transition": "Energy Efficiency and Transition",
-  "Water": "Water",
-  "Circular Economy": "Circular Economy",
-  "Construction": "Construction",
+  "Natural Hazards and Extreme Events": "Natural Hazards and Extreme Events", 
+  "Water Management": "Water Management",
+  "Waste and Resource Management": "Waste and Resource Management",
+  "Sustainable Community Engagement": "Sustainable Community Engagement",
+  "Construction and Design": "Construction and Design",
 };
 
 interface GameFilterPanelProps {
