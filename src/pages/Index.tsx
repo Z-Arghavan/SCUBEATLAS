@@ -203,7 +203,8 @@ export default function Index() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch('/forRepo_Data.json');
+        // Use relative path that works with both dev and production base paths
+        const response = await fetch('./forRepo_Data.json');
         const text = await response.text();
         // Replace NaN with null to make valid JSON
         const cleanText = text.replace(/\bNaN\b/g, 'null');
