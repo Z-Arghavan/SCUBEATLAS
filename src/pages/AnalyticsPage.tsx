@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -163,13 +162,12 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // GitHub Pages optimized paths
-        const baseUrl = import.meta.env.PROD ? '/SCUBEATLAS' : '';
+        // Updated GitHub repository URLs
         const possiblePaths = [
-          `${baseUrl}/forRepo_Data.json`,
+          'https://raw.githubusercontent.com/Z-Arghavan/SCUBEATLAS/main/forRepo_Data.json',
+          'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json',
           './forRepo_Data.json',
-          '/forRepo_Data.json',
-          'https://raw.githubusercontent.com/z-arghavan/SCUBEATLAS/main/forRepo_Data.json'
+          '/forRepo_Data.json'
         ];
         
         let response;
