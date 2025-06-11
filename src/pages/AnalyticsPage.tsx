@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -162,7 +163,15 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch('./forRepo_Data.json');
+        // Try different possible paths for the JSON file
+        let response;
+        try {
+          response = await fetch('/forRepo_Data.json');
+        } catch (error) {
+          console.log('Trying alternative path...');
+          response = await fetch('./forRepo_Data.json');
+        }
+        
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -170,6 +179,7 @@ export default function AnalyticsPage() {
         const cleanText = text.replace(/\bNaN\b/g, 'null');
         const jsonData = JSON.parse(cleanText);
         const convertedGames = jsonData.map(convertJsonToGameData);
+        console.log('Loaded games:', convertedGames.length);
         setGames(convertedGames);
         setLoading(false);
       } catch (error) {
