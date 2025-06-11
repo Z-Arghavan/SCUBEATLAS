@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -257,9 +256,15 @@ export default function AnalyticsPage() {
   }, {} as Record<string, number>);
 
   const sankeyData = Object.entries(purposeToThemeData)
-    .map(([flow, count]) => {
+    .map(([flow, count], index) => {
       const [purpose, theme] = flow.split(' → ');
-      return { flow, purpose, theme, count };
+      return { 
+        id: `sankey-${index}`, // Add unique ID
+        flow, 
+        purpose, 
+        theme, 
+        count 
+      };
     })
     .sort((a, b) => b.count - a.count)
     .slice(0, 15); // Show top 15 flows
