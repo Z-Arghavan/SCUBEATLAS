@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import GameFilterPanel, { Filters, categoryMapping } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
@@ -105,7 +106,7 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
 }
 
 // Load data from the new JSON file
-import jsonData from '../forRepo_Data.json';
+const jsonData = await import('/forRepo_Data.json').then(module => module.default);
 
 // Convert the new format data to GameData format
 const realGames: GameData[] = jsonData.map(convertJsonToGameData);
