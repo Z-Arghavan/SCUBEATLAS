@@ -105,12 +105,6 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
   };
 }
 
-// Load data from the new JSON file
-const jsonData = await import('/forRepo_Data.json').then(module => module.default);
-
-// Convert the new format data to GameData format
-const realGames: GameData[] = jsonData.map(convertJsonToGameData);
-
 function uniqueValuesFor(games: GameData[], field: keyof GameData): string[] {
   const set = new Set<string>();
   games.forEach(g => {
@@ -127,6 +121,10 @@ function uniqueValuesFor(games: GameData[], field: keyof GameData): string[] {
 }
 
 export default function Index() {
+  // State for games data
+  const [realGames, setRealGames] = useState<GameData[]>([]);
+  const [loading, setLoading] = useState(true);
+
   // Filtering state
   const [filters, setFilters] = useState<Filters>({
     year: "",
@@ -140,6 +138,29 @@ export default function Index() {
   const [search, setSearch] = useState("");
   const [listMode, setListMode] = useState<"grid" | "list">("grid");
   const [modal, setModal] = useState<GameData | null>(null);
+
+  // Load data on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const response = await fetch('/forRepo_Data.json');
+        const text = await response.text();
+        // Replace NaN with null to make valid JSON
+        const cleanText = text.replace(/\bNaN\b/g, 'null');
+        const jsonData = JSON.parse(cleanText);
+        
+        // Convert the data to GameData format
+        const games = jsonData.map(convertJsonToGameData);
+        setRealGames(games);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading game data:', error);
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   // Prepare year options dynamically from data
   const yearOptions = uniqueValuesFor(realGames, "year");
@@ -207,6 +228,18 @@ export default function Index() {
     window.addEventListener("gamefilter:chip", onChip);
     return () => window.removeEventListener("gamefilter:chip", onChip);
   }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col items-stretch">
+        <Header />
+        <div className="max-w-7xl w-full mx-auto py-10 px-2 sm:px-4 flex justify-center items-center min-h-96">
+          <div className="text-lg text-gray-500">Loading games...</div>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
 
   return <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col items-stretch">
       <Header />
