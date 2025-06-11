@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, List, Grid2x2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,6 @@ const playerModeOptions = ["Single Player", "Multi Player", "Both"];
 
 // Category options exactly as they appear in the JSON data
 const categoryOptions = [
-  "General Sustainable Development",
   "Urban Development and Planning",
   "Energy Efficiency and Transition", 
   "Natural Hazards and Extreme Events",

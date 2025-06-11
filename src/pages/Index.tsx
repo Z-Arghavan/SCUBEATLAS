@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import GameFilterPanel, { Filters } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
@@ -63,7 +64,7 @@ function cleanText(text: string): string {
 
 // Helper function to normalize category names to match filter dropdown exactly
 function normalizeCategory(category: string): string {
-  if (!category) return "General Sustainable Development";
+  if (!category) return "Sustainable Community Engagement";
   
   const cleaned = cleanText(category);
   console.log('Original category:', category, '-> Cleaned category:', cleaned);
@@ -79,7 +80,7 @@ function normalizeCategory(category: string): string {
     "Construction and Design": "Construction and Design",
   };
   
-  const result = categoryMap[cleaned] || "General Sustainable Development";
+  const result = categoryMap[cleaned] || "Sustainable Community Engagement";
   console.log('Final mapped category:', result);
   return result;
 }
