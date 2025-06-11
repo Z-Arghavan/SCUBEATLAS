@@ -66,6 +66,7 @@ function normalizeCategory(category: string): string {
   if (!category) return "General Sustainable Development";
   
   const cleaned = cleanText(category);
+  console.log('Original category:', category, '-> Cleaned category:', cleaned);
   
   // Map common variations to the exact filter dropdown categories
   const categoryMap: Record<string, string> = {
@@ -77,7 +78,9 @@ function normalizeCategory(category: string): string {
     "Natural Hazards": "Natural Hazards"
   };
   
-  return categoryMap[cleaned] || "General Sustainable Development";
+  const result = categoryMap[cleaned] || "General Sustainable Development";
+  console.log('Final mapped category:', result);
+  return result;
 }
 
 // Helper function to parse audience from JSON data
@@ -157,6 +160,7 @@ function parseTechnology(techData: any): string[] {
 // Function to convert new JSON format to GameData format
 function convertJsonToGameData(jsonItem: any, index: number): GameData {
   console.log('Converting item:', jsonItem);
+  console.log('Raw category from JSON:', jsonItem.category);
   
   const cleanTitle = cleanText(jsonItem.Title || "Untitled Article");
   const cleanDescription = cleanText(jsonItem.Description || "No description available");
@@ -231,11 +235,18 @@ export default function Index() {
         console.log('Parsed JSON data length:', jsonData.length);
         console.log('Sample data item:', jsonData[0]);
         
+        // Log all unique raw categories from the JSON
+        const rawCategories = [...new Set(jsonData.map((item: any) => item.category))].filter(Boolean);
+        console.log('All unique RAW categories from JSON:', rawCategories);
+        
         // Convert the data to GameData format
         const games = jsonData.map(convertJsonToGameData);
         console.log('Converted games count:', games.length);
         console.log('Sample converted game:', games[0]);
-        console.log('All unique categories:', [...new Set(games.map(g => g.category))].sort());
+        
+        // Log all unique normalized categories after conversion
+        const normalizedCategories = [...new Set(games.map(g => g.category))].sort();
+        console.log('All unique NORMALIZED categories after conversion:', normalizedCategories);
         
         setRealGames(games);
         setLoading(false);
