@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, List, Grid2x2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,11 +22,11 @@ const audienceOptions = ["General Public", "Students", "Business Professionals"]
 
 const playerModeOptions = ["Single Player", "Multi Player", "Both"];
 
-// Updated category options to match the actual data
+// Category options exactly as they should appear in the filter and be used throughout
 const categoryOptions = [
   "General Sustainable Development",
   "Natural Hazards",
-  "Urban Development",
+  "Urban Development", 
   "Energy Efficiency and Transition",
   "Water",
   "Circular Economy",

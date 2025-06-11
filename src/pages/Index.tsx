@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import GameFilterPanel, { Filters, categoryMapping } from "@/components/GameFilterPanel";
+import GameFilterPanel, { Filters } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
 import { GameData } from "@/components/GameCard";
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle } from "@/components/ui/dialog";
@@ -62,23 +61,23 @@ function cleanText(text: string): string {
     .trim();
 }
 
-// Helper function to normalize category names
+// Helper function to normalize category names to match filter dropdown exactly
 function normalizeCategory(category: string): string {
   if (!category) return "General Sustainable Development";
   
   const cleaned = cleanText(category);
   
-  // Map common variations to standard categories
+  // Map common variations to the exact filter dropdown categories
   const categoryMap: Record<string, string> = {
     "Green": "Energy Efficiency and Transition",
     "Circular Economy": "Circular Economy",
-    "Construction": "Construction",
+    "Construction": "Construction", 
     "Water": "Water",
     "Urban Development": "Urban Development",
     "Natural Hazards": "Natural Hazards"
   };
   
-  return categoryMap[cleaned] || cleaned || "General Sustainable Development";
+  return categoryMap[cleaned] || "General Sustainable Development";
 }
 
 // Helper function to parse audience from JSON data
@@ -252,17 +251,13 @@ export default function Index() {
   // Prepare year options dynamically from data
   const yearOptions = uniqueValuesFor(realGames, "year");
 
-  // Filtering + Search logic
+  // Filtering + Search logic - simplified category filtering
   const gamesFiltered = realGames.filter(game => {
     // Filter by dropdowns
     if (filters.year && game.year !== filters.year) return false;
     
-    // Fixed category filtering - map user category to JSON category for filtering
-    if (filters.category) {
-      const jsonCategory = categoryMapping[filters.category];
-      if (jsonCategory && game.category !== jsonCategory) return false;
-      if (!jsonCategory && game.category !== filters.category) return false;
-    }
+    // Direct category filtering using the exact filter dropdown values
+    if (filters.category && game.category !== filters.category) return false;
     
     // Tech, age, purpose (multi)
     if (filters.technology.length && !filters.technology.some(t => game.technology.includes(t))) return false;
@@ -285,7 +280,7 @@ export default function Index() {
   
   const navigate = useNavigate();
 
-  // Chip filter event handler
+  // Chip filter event handler - simplified for direct category filtering
   useEffect(() => {
     function onChip(ev: any) {
       const { field, value } = ev.detail || {};
@@ -296,14 +291,8 @@ export default function Index() {
           ...f,
           [field]: [value]
         }));
-      } else if (field === "category") {
-        // Find the user category that maps to this JSON category
-        const userCategory = Object.keys(categoryMapping).find(key => categoryMapping[key] === value);
-        setFilters(f => ({
-          ...f,
-          [field]: userCategory || value
-        }));
       } else {
+        // Direct assignment for category and year
         setFilters(f => ({
           ...f,
           [field]: value
