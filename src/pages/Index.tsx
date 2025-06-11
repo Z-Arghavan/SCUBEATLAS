@@ -95,12 +95,15 @@ function parseTechnology(techData: any): string[] {
   const tech = String(techData).toLowerCase();
   
   // Handle hybrid cases first (combinations with boardgame)
-  if (tech.includes('boardgame') && (tech.includes('pc') || tech.includes('mobile') || tech.includes('ar') || tech.includes('vr'))) {
+  if ((tech.includes('boardgame') || tech.includes('board game')) && (tech.includes('pc') || tech.includes('mobile') || tech.includes('ar') || tech.includes('vr') || tech.includes('m'))) {
     return ["Hybrid"];
   }
   
-  // Handle physical games
-  if (tech.includes('boardgame') || tech.includes('escape room')) {
+  // Handle physical games - check for various formats
+  if (tech.includes('boardgame') || 
+      tech.includes('board game') || 
+      tech.includes('escape room') || 
+      tech === 'physical') {
     return ["Physical"];
   }
   
@@ -114,7 +117,7 @@ function parseTechnology(techData: any): string[] {
     return ["Digital"];
   }
   
-  if (tech.includes('pc') && tech.includes('mobile')) {
+  if (tech.includes('pc') && (tech.includes('mobile') || tech.includes('m'))) {
     return ["Digital"];
   }
   
@@ -122,8 +125,13 @@ function parseTechnology(techData: any): string[] {
     return ["Digital"];
   }
   
-  if (tech.includes('mobile') || tech.includes('m')) {
+  if (tech.includes('mobile') || tech.includes('m') || tech.includes('tablet')) {
     return ["Digital"];
+  }
+  
+  // Handle N/A cases
+  if (tech.includes('n/a')) {
+    return ["Digital"]; // Default for N/A
   }
   
   // Default fallback
