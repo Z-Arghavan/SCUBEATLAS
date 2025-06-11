@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import GameFilterPanel, { Filters, categoryMapping } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
@@ -148,6 +147,8 @@ function parseTechnology(techData: any): string[] {
 
 // Function to convert new JSON format to GameData format
 function convertJsonToGameData(jsonItem: any, index: number): GameData {
+  console.log('Converting item:', jsonItem); // Debug log
+  
   return {
     id: index + 1,
     title: jsonItem.Title || "Untitled Article",
@@ -205,13 +206,24 @@ export default function Index() {
       try {
         // Use relative path that works with both dev and production base paths
         const response = await fetch('./forRepo_Data.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const text = await response.text();
+        console.log('Raw response text:', text.substring(0, 200)); // Debug log
+        
         // Replace NaN with null to make valid JSON
         const cleanText = text.replace(/\bNaN\b/g, 'null');
         const jsonData = JSON.parse(cleanText);
         
+        console.log('Parsed JSON data:', jsonData); // Debug log
+        console.log('Number of items:', jsonData.length); // Debug log
+        
         // Convert the data to GameData format
         const games = jsonData.map(convertJsonToGameData);
+        console.log('Converted games:', games); // Debug log
+        console.log('First game:', games[0]); // Debug log
+        
         setRealGames(games);
         setLoading(false);
       } catch (error) {
@@ -290,6 +302,9 @@ export default function Index() {
     return () => window.removeEventListener("gamefilter:chip", onChip);
   }, []);
 
+  console.log('Real games state:', realGames); // Debug log
+  console.log('Filtered games:', gamesFiltered); // Debug log
+
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col items-stretch">
@@ -302,15 +317,28 @@ export default function Index() {
     );
   }
 
-  return <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col items-stretch">
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col items-stretch">
       <Header />
       <div className="max-w-7xl w-full mx-auto py-10 px-2 sm:px-4">
         <h1 className="text-3xl font-bold mb-2 text-center text-primary">Atlas of Sustainable & Circular Urban Built Environment Serious Games</h1>
         <p className="text-lg text-gray-500 mb-10 text-center max-w-[700px] mx-auto">
-      </p>
-        <GameFilterPanel filters={filters} setFilters={setFilters} search={search} setSearch={setSearch} listMode={listMode} setListMode={setListMode} yearOptions={yearOptions} />
+        </p>
+        <GameFilterPanel 
+          filters={filters} 
+          setFilters={setFilters} 
+          search={search} 
+          setSearch={setSearch} 
+          listMode={listMode} 
+          setListMode={setListMode} 
+          yearOptions={yearOptions} 
+        />
+        <div className="mb-4 text-sm text-gray-600">
+          Showing {gamesFiltered.length} of {realGames.length} games
+        </div>
         <GameGrid games={gamesFiltered} onMore={setModal} viewMode={listMode} />
       </div>
+      
       {/* Modal for game details */}
       <Dialog open={!!modal} onOpenChange={() => setModal(null)}>
         <DialogContent>
@@ -344,5 +372,6 @@ export default function Index() {
         </DialogContent>
       </Dialog>
       <Footer />
-    </main>;
+    </main>
+  );
 }
