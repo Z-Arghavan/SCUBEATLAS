@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import GameFilterPanel, { Filters, categoryMapping } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
@@ -202,7 +203,7 @@ export default function Index() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch('/forRepo_Data.json');
+        const response = await fetch('./forRepo_Data.json');
         const text = await response.text();
         // Replace NaN with null to make valid JSON
         const cleanText = text.replace(/\bNaN\b/g, 'null');
