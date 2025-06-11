@@ -82,9 +82,44 @@ function parseAge(ageData: any): string[] {
 
 // Helper function to parse technology from JSON data
 function parseTechnology(techData: any): string[] {
-  if (!techData) return ["PC"]; // Default fallback
-  const mapped = technologyMapping[techData];
-  return mapped ? [mapped] : [techData];
+  if (!techData) return ["Digital"]; // Default fallback
+  
+  const tech = String(techData).toLowerCase();
+  
+  // Handle hybrid cases first (combinations with boardgame)
+  if (tech.includes('boardgame') && (tech.includes('pc') || tech.includes('mobile') || tech.includes('ar') || tech.includes('vr'))) {
+    return ["Hybrid"];
+  }
+  
+  // Handle physical games
+  if (tech.includes('boardgame') || tech.includes('escape room')) {
+    return ["Physical"];
+  }
+  
+  // Handle VR/AR/XR
+  if (tech.includes('vr') || tech.includes('ar') || tech.includes('xr')) {
+    return ["Virtual Reality (XR)"];
+  }
+  
+  // Handle digital platforms
+  if (tech.includes('multi-platform')) {
+    return ["Digital"];
+  }
+  
+  if (tech.includes('pc') && tech.includes('mobile')) {
+    return ["Digital"];
+  }
+  
+  if (tech.includes('pc')) {
+    return ["Digital"];
+  }
+  
+  if (tech.includes('mobile') || tech.includes('m')) {
+    return ["Digital"];
+  }
+  
+  // Default fallback
+  return ["Digital"];
 }
 
 // Function to convert new JSON format to GameData format
