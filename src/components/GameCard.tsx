@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +20,8 @@ export interface GameData {
   audience: string[];
   playerMode?: string[];
   link?: string;
-  gameName?: string; // Add gameName field
+  gameName?: string;
+  originalTechnology?: string; // Add original technology data
 }
 
 // Reverse mapping from JSON categories to user categories
@@ -54,6 +54,27 @@ export default function GameCard({ game, onMore, viewMode = "grid" }: GameCardPr
 
   // Use GameName if available, otherwise fall back to title
   const displayName = game.gameName || game.title;
+
+  // Helper to get detailed technology info
+  const getTechnologyDetails = (tech: string, originalTech?: string) => {
+    if (!originalTech) return tech;
+    
+    // Show original details for specific categories
+    if (tech === "Virtual Reality (XR)") {
+      return `${tech} (${originalTech})`;
+    }
+    if (tech === "Physical") {
+      return `${tech} (${originalTech})`;
+    }
+    if (tech === "Digital") {
+      return `${tech} (${originalTech})`;
+    }
+    if (tech === "Hybrid") {
+      return `${tech} (${originalTech})`;
+    }
+    
+    return tech;
+  };
 
   return (
     <div
@@ -89,8 +110,9 @@ export default function GameCard({ game, onMore, viewMode = "grid" }: GameCardPr
               className="bg-yellow-50 text-yellow-700 px-2 py-0.5 rounded text-xs hover:bg-yellow-100 focus:outline-none"
               onClick={() => handleFilter("technology", tech)}
               aria-label={"Filter by technology " + tech}
+              title={getTechnologyDetails(tech, game.originalTechnology)}
             >
-              {tech}
+              {getTechnologyDetails(tech, game.originalTechnology)}
             </button>
           ))}
           {game.purpose.map(p => (

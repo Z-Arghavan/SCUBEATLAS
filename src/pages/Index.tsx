@@ -159,7 +159,8 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
     audience: parseAudience(jsonItem["Student/Business/GeneralPublic"]),
     playerMode: parsePlayerMode(jsonItem["Multi/single/Both player"]),
     link: "",
-    gameName: jsonItem.GameName || jsonItem.Title || "Untitled Game"
+    gameName: jsonItem.GameName || jsonItem.Title || "Untitled Game",
+    originalTechnology: jsonItem["PC/mobile"] // Preserve original technology data
   };
 }
 
