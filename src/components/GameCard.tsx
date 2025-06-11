@@ -21,6 +21,7 @@ export interface GameData {
   audience: string[];
   playerMode?: string[];
   link?: string;
+  gameName?: string; // Add gameName field
 }
 
 // Reverse mapping from JSON categories to user categories
@@ -51,6 +52,9 @@ export default function GameCard({ game, onMore, viewMode = "grid" }: GameCardPr
     return reverseMapping[jsonCategory] || jsonCategory;
   };
 
+  // Use GameName if available, otherwise fall back to title
+  const displayName = game.gameName || game.title;
+
   return (
     <div
       className={cn(
@@ -62,7 +66,7 @@ export default function GameCard({ game, onMore, viewMode = "grid" }: GameCardPr
         "flex-1 min-w-0",
         viewMode === "list" ? "" : "mb-5"
       )}>
-        <h2 className="text-lg font-semibold truncate mb-1">{game.title}</h2>
+        <h2 className="text-lg font-semibold truncate mb-1">{displayName}</h2>
         <p className="text-sm text-gray-600 line-clamp-2 mb-2">{game.description}</p>
         <div className="flex flex-wrap gap-2 mt-2">
           <button

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import GameFilterPanel, { Filters, categoryMapping } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
@@ -92,7 +91,7 @@ function parseTechnology(techData: any): string[] {
 function convertJsonToGameData(jsonItem: any, index: number): GameData {
   return {
     id: index + 1,
-    title: jsonItem.Title || jsonItem.GameName || "Untitled Game",
+    title: jsonItem.Title || "Untitled Article",
     description: jsonItem.Description || "No description available",
     year: String(jsonItem.Year || "Unknown"),
     category: jsonItem.category || "General Sustainable Development",
@@ -101,7 +100,8 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
     purpose: parsePurpose(jsonItem["Pe/Pu/Pa"]),
     audience: parseAudience(jsonItem["Student/Business/GeneralPublic"]),
     playerMode: parsePlayerMode(jsonItem["Multi/single/Both player"]),
-    link: ""
+    link: "",
+    gameName: jsonItem.GameName || jsonItem.Title || "Untitled Game"
   };
 }
 
@@ -255,7 +255,10 @@ export default function Index() {
         <DialogContent>
           {modal && <>
               <DialogHeader>
-                <DialogTitle className="text-2xl">{modal.title}</DialogTitle>
+                <DialogTitle className="text-2xl">{modal.gameName || modal.title}</DialogTitle>
+                {modal.gameName && modal.title !== modal.gameName && (
+                  <p className="text-sm text-gray-600 mt-1">Article: {modal.title}</p>
+                )}
               </DialogHeader>
               <div className="text-gray-700 mb-4">{modal.description}</div>
               <div className="flex flex-wrap gap-2 mb-6">
