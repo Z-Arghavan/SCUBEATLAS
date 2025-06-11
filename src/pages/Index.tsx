@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Mapping for audience codes to user-friendly labels
+// Updated mapping for audience codes to user-friendly labels
 const audienceMapping: Record<string, string> = {
   "S": "Students",
   "B": "Business Professionals", 
@@ -149,12 +149,45 @@ function parseTechnology(techData: any): string[] {
 function convertJsonToGameData(jsonItem: any, index: number): GameData {
   console.log('Converting item:', jsonItem); // Debug log
   
+  // Clean up category names that might have text replacement issues
+  let cleanCategory = jsonItem.category || "General Sustainable Development";
+  
+  // Fix common text replacement issues in categories
+  cleanCategory = cleanCategory
+    .replace(/GrEnergy Efficiency and Transitionn/g, "Green")
+    .replace(/Energy Efficiency and Transitionn/g, "Energy Efficiency and Transition")
+    .replace(/stUrban Developmentents/g, "students")
+    .replace(/enginEnergy Efficiency and Transitionring/g, "engineering")
+    .replace(/inclUrban Developmentes/g, "includes")
+    .replace(/Urban Developmentent/g, "student");
+  
+  // Clean up description text with similar replacements
+  let cleanDescription = jsonItem.Description || "No description available";
+  if (typeof cleanDescription === 'string') {
+    cleanDescription = cleanDescription
+      .replace(/GrEnergy Efficiency and Transitionn/g, "Green")
+      .replace(/Energy Efficiency and Transitionn/g, "Energy Efficiency and Transition")
+      .replace(/stUrban Developmentents/g, "students")
+      .replace(/enginEnergy Efficiency and Transitionring/g, "engineering")
+      .replace(/inclUrban Developmentes/g, "includes")
+      .replace(/Urban Developmentent/g, "student");
+  }
+  
+  // Clean up title text
+  let cleanTitle = jsonItem.Title || "Untitled Article";
+  if (typeof cleanTitle === 'string') {
+    cleanTitle = cleanTitle
+      .replace(/GrEnergy Efficiency and Transitionn/g, "Green")
+      .replace(/Energy Efficiency and Transitionn/g, "Energy Efficiency and Transition")
+      .replace(/€/g, "—"); // Replace euro symbol with em dash
+  }
+  
   return {
     id: index + 1,
-    title: jsonItem.Title || "Untitled Article",
-    description: jsonItem.Description || "No description available",
+    title: cleanTitle,
+    description: cleanDescription,
     year: String(jsonItem.Year || "Unknown"),
-    category: jsonItem.category || "General Sustainable Development",
+    category: cleanCategory,
     technology: parseTechnology(jsonItem["PC/mobile"]),
     age: parseAge(jsonItem["Child/Adult"]),
     purpose: parsePurpose(jsonItem["Pe/Pu/Pa"]),
@@ -210,19 +243,20 @@ export default function Index() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const text = await response.text();
-        console.log('Raw response text:', text.substring(0, 200)); // Debug log
+        console.log('Raw response text (first 500 chars):', text.substring(0, 500)); // Debug log
         
         // Replace NaN with null to make valid JSON
         const cleanText = text.replace(/\bNaN\b/g, 'null');
         const jsonData = JSON.parse(cleanText);
         
-        console.log('Parsed JSON data:', jsonData); // Debug log
-        console.log('Number of items:', jsonData.length); // Debug log
+        console.log('Parsed JSON data length:', jsonData.length); // Debug log
+        console.log('Sample data item:', jsonData[0]); // Debug log
         
         // Convert the data to GameData format
         const games = jsonData.map(convertJsonToGameData);
-        console.log('Converted games:', games); // Debug log
-        console.log('First game:', games[0]); // Debug log
+        console.log('Converted games count:', games.length); // Debug log
+        console.log('Sample converted game:', games[0]); // Debug log
+        console.log('All unique categories:', [...new Set(games.map(g => g.category))].sort()); // Debug log
         
         setRealGames(games);
         setLoading(false);
