@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
@@ -21,19 +22,8 @@ export interface GameData {
   playerMode?: string[];
   link?: string;
   gameName?: string;
-  originalTechnology?: string; // Add original technology data
+  originalTechnology?: string;
 }
-
-// Reverse mapping from JSON categories to user categories
-const reverseMapping: Record<string, string> = {
-  "General Sustainable Development": "Sustainable Community Engagement",
-  "Natural Hazards": "Natural Hazards and Extreme Events",
-  "Urban Development": "Urban Development and Planning",
-  "Energy Efficiency and Transition": "Energy Efficiency and Transition",
-  "Water": "Water Management",
-  "Circular Economy": "Waste and Resource Management",
-  "Construction": "Construction and Architecture",
-};
 
 export default function GameCard({ game, onMore, viewMode = "grid" }: GameCardProps) {
   const navigate = useNavigate();
@@ -46,11 +36,6 @@ export default function GameCard({ game, onMore, viewMode = "grid" }: GameCardPr
     const el = document.getElementById("main-results");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-
-  // Get user-friendly category label
-  const getUserCategory = (jsonCategory: string) => {
-    return reverseMapping[jsonCategory] || jsonCategory;
-  };
 
   // Use GameName if available, otherwise fall back to title
   const displayName = game.gameName || game.title;
@@ -100,9 +85,9 @@ export default function GameCard({ game, onMore, viewMode = "grid" }: GameCardPr
           <button
             className="bg-green-50 text-green-700 px-2 py-0.5 rounded text-xs hover:bg-green-100 focus:outline-none"
             onClick={() => handleFilter("category", game.category)}
-            aria-label={"Filter by category " + getUserCategory(game.category)}
+            aria-label={"Filter by category " + game.category}
           >
-            {getUserCategory(game.category)}
+            {game.category}
           </button>
           {game.technology.map(tech => (
             <button

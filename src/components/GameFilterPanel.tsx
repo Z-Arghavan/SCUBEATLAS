@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, List, Grid2x2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,26 +23,26 @@ const audienceOptions = ["General Public", "Students", "Business Professionals"]
 
 const playerModeOptions = ["Single Player", "Multi Player", "Both"];
 
-// User-friendly category labels mapped to JSON categories
+// Updated category options to match the actual data
 const categoryOptions = [
-  "Sustainable Community Engagement",
-  "Natural Hazards and Extreme Events",
-  "Urban Development and Planning",
+  "General Sustainable Development",
+  "Natural Hazards",
+  "Urban Development",
   "Energy Efficiency and Transition",
-  "Water Management",
-  "Waste and Resource Management",
-  "Construction and Architecture",
+  "Water",
+  "Circular Economy",
+  "Construction",
 ];
 
-// Mapping from user categories to JSON categories
+// Simplified mapping - direct mapping for exact matches
 export const categoryMapping: Record<string, string> = {
-  "Sustainable Community Engagement": "General Sustainable Development",
-  "Natural Hazards and Extreme Events": "Natural Hazards",
-  "Urban Development and Planning": "Urban Development",
+  "General Sustainable Development": "General Sustainable Development",
+  "Natural Hazards": "Natural Hazards",
+  "Urban Development": "Urban Development",
   "Energy Efficiency and Transition": "Energy Efficiency and Transition",
-  "Water Management": "Water",
-  "Waste and Resource Management": "Circular Economy",
-  "Construction and Architecture": "Construction",
+  "Water": "Water",
+  "Circular Economy": "Circular Economy",
+  "Construction": "Construction",
 };
 
 interface GameFilterPanelProps {
@@ -154,6 +155,7 @@ export default function GameFilterPanel({
             <option value={y} key={y}>{y}</option>
           ))}
         </select>
+        
         {/* Category */}
         <select
           className="border rounded-md px-3 py-2 text-sm bg-white shadow-sm min-w-[140px]"
@@ -165,6 +167,7 @@ export default function GameFilterPanel({
             <option value={cat} key={cat}>{cat}</option>
           ))}
         </select>
+
         {/* Technology */}
         <Popover>
           <PopoverTrigger asChild>
@@ -184,6 +187,7 @@ export default function GameFilterPanel({
             ))}
           </PopoverContent>
         </Popover>
+
         {/* Age */}
         <Popover>
           <PopoverTrigger asChild>
@@ -203,6 +207,7 @@ export default function GameFilterPanel({
             ))}
           </PopoverContent>
         </Popover>
+
         {/* Purpose */}
         <Popover>
           <PopoverTrigger asChild>
@@ -222,6 +227,7 @@ export default function GameFilterPanel({
             ))}
           </PopoverContent>
         </Popover>
+
         {/* Audience */}
         <Popover>
           <PopoverTrigger asChild>
@@ -241,6 +247,7 @@ export default function GameFilterPanel({
             ))}
           </PopoverContent>
         </Popover>
+
         {/* Player Mode */}
         <Popover>
           <PopoverTrigger asChild>

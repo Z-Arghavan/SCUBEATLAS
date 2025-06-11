@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import GameFilterPanel, { Filters, categoryMapping } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
@@ -36,15 +37,49 @@ const ageMapping: Record<string, string> = {
   "A": "Adults"
 };
 
-// Mapping for technology codes to user-friendly labels
+// Simplified technology mapping
 const technologyMapping: Record<string, string> = {
-  "PC": "PC",
-  "Mobile": "Mobile",
-  "Multi-platform": "PC",
-  "VR/AR": "XR",
+  "PC": "Digital",
+  "Mobile": "Digital",
+  "Multi-platform": "Digital",
+  "VR/AR": "Virtual Reality (XR)",
   "Physical": "Physical",
   "Hybrid": "Hybrid"
 };
+
+// Helper function to clean text data
+function cleanText(text: string): string {
+  if (!text || typeof text !== 'string') return text;
+  
+  return text
+    .replace(/GrEnergy Efficiency and Transitionn/g, "Green")
+    .replace(/Energy Efficiency and Transitionn/g, "Energy Efficiency and Transition")
+    .replace(/stUrban Developmentents/g, "students")
+    .replace(/enginEnergy Efficiency and Transitionring/g, "engineering")
+    .replace(/inclUrban Developmentes/g, "includes")
+    .replace(/Urban Developmentent/g, "student")
+    .replace(/€/g, "—")
+    .trim();
+}
+
+// Helper function to normalize category names
+function normalizeCategory(category: string): string {
+  if (!category) return "General Sustainable Development";
+  
+  const cleaned = cleanText(category);
+  
+  // Map common variations to standard categories
+  const categoryMap: Record<string, string> = {
+    "Green": "Energy Efficiency and Transition",
+    "Circular Economy": "Circular Economy",
+    "Construction": "Construction",
+    "Water": "Water",
+    "Urban Development": "Urban Development",
+    "Natural Hazards": "Natural Hazards"
+  };
+  
+  return categoryMap[cleaned] || cleaned || "General Sustainable Development";
+}
 
 // Helper function to parse audience from JSON data
 function parseAudience(audienceData: any): string[] {
@@ -88,29 +123,26 @@ function parseAge(ageData: any): string[] {
   return mapped ? [mapped] : [];
 }
 
-// Helper function to parse technology from JSON data
+// Simplified technology parsing function
 function parseTechnology(techData: any): string[] {
-  if (!techData) return ["Digital"]; // Default fallback
+  if (!techData) return ["Digital"];
   
-  const tech = String(techData).toLowerCase();
+  const tech = String(techData).toLowerCase().trim();
   
-  // Handle hybrid cases first (combinations with boardgame)
-  if ((tech.includes('boardgame') || tech.includes('board game')) && (tech.includes('pc') || tech.includes('mobile') || tech.includes('ar') || tech.includes('vr') || tech.includes('m'))) {
-    // Return both Hybrid and the individual components so they show up in both filters
-    const components = [];
-    if (tech.includes('pc')) components.push("Digital");
-    if (tech.includes('mobile') || tech.includes('m')) components.push("Digital");
-    if (tech.includes('ar') || tech.includes('vr')) components.push("Virtual Reality (XR)");
-    components.push("Physical"); // Always add Physical for boardgame hybrids
-    components.push("Hybrid");
-    return [...new Set(components)]; // Remove duplicates
+  // Handle N/A cases
+  if (tech.includes('n/a') || tech === '') {
+    return ["Digital"];
   }
   
-  // Handle physical games - check for various formats
-  if (tech.includes('boardgame') || 
-      tech.includes('board game') || 
-      tech.includes('escape room') || 
-      tech === 'physical') {
+  // Handle hybrid cases (combinations with boardgame)
+  if ((tech.includes('boardgame') || tech.includes('board game')) && 
+      (tech.includes('pc') || tech.includes('mobile') || tech.includes('ar') || tech.includes('vr'))) {
+    return ["Hybrid"];
+  }
+  
+  // Handle physical games
+  if (tech.includes('boardgame') || tech.includes('board game') || 
+      tech.includes('escape room') || tech === 'physical') {
     return ["Physical"];
   }
   
@@ -119,68 +151,17 @@ function parseTechnology(techData: any): string[] {
     return ["Virtual Reality (XR)"];
   }
   
-  // Handle digital platforms
-  if (tech.includes('multi-platform')) {
-    return ["Digital"];
-  }
-  
-  if (tech.includes('pc') && (tech.includes('mobile') || tech.includes('m'))) {
-    return ["Digital"];
-  }
-  
-  if (tech.includes('pc')) {
-    return ["Digital"];
-  }
-  
-  if (tech.includes('mobile') || tech.includes('m') || tech.includes('tablet')) {
-    return ["Digital"];
-  }
-  
-  // Handle N/A cases
-  if (tech.includes('n/a')) {
-    return ["Digital"]; // Default for N/A
-  }
-  
-  // Default fallback
+  // Everything else is digital
   return ["Digital"];
 }
 
 // Function to convert new JSON format to GameData format
 function convertJsonToGameData(jsonItem: any, index: number): GameData {
-  console.log('Converting item:', jsonItem); // Debug log
+  console.log('Converting item:', jsonItem);
   
-  // Clean up category names that might have text replacement issues
-  let cleanCategory = jsonItem.category || "General Sustainable Development";
-  
-  // Fix common text replacement issues in categories
-  cleanCategory = cleanCategory
-    .replace(/GrEnergy Efficiency and Transitionn/g, "Green")
-    .replace(/Energy Efficiency and Transitionn/g, "Energy Efficiency and Transition")
-    .replace(/stUrban Developmentents/g, "students")
-    .replace(/enginEnergy Efficiency and Transitionring/g, "engineering")
-    .replace(/inclUrban Developmentes/g, "includes")
-    .replace(/Urban Developmentent/g, "student");
-  
-  // Clean up description text with similar replacements
-  let cleanDescription = jsonItem.Description || "No description available";
-  if (typeof cleanDescription === 'string') {
-    cleanDescription = cleanDescription
-      .replace(/GrEnergy Efficiency and Transitionn/g, "Green")
-      .replace(/Energy Efficiency and Transitionn/g, "Energy Efficiency and Transition")
-      .replace(/stUrban Developmentents/g, "students")
-      .replace(/enginEnergy Efficiency and Transitionring/g, "engineering")
-      .replace(/inclUrban Developmentes/g, "includes")
-      .replace(/Urban Developmentent/g, "student");
-  }
-  
-  // Clean up title text
-  let cleanTitle = jsonItem.Title || "Untitled Article";
-  if (typeof cleanTitle === 'string') {
-    cleanTitle = cleanTitle
-      .replace(/GrEnergy Efficiency and Transitionn/g, "Green")
-      .replace(/Energy Efficiency and Transitionn/g, "Energy Efficiency and Transition")
-      .replace(/€/g, "—"); // Replace euro symbol with em dash
-  }
+  const cleanTitle = cleanText(jsonItem.Title || "Untitled Article");
+  const cleanDescription = cleanText(jsonItem.Description || "No description available");
+  const cleanCategory = normalizeCategory(jsonItem.category);
   
   return {
     id: index + 1,
@@ -194,8 +175,8 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
     audience: parseAudience(jsonItem["Student/Business/GeneralPublic"]),
     playerMode: parsePlayerMode(jsonItem["Multi/single/Both player"]),
     link: "",
-    gameName: jsonItem.GameName || jsonItem.Title || "Untitled Game",
-    originalTechnology: jsonItem["PC/mobile"] // Preserve original technology data
+    gameName: cleanText(jsonItem.GameName || jsonItem.Title || "Untitled Game"),
+    originalTechnology: jsonItem["PC/mobile"]
   };
 }
 
@@ -237,26 +218,25 @@ export default function Index() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Use relative path that works with both dev and production base paths
         const response = await fetch('./forRepo_Data.json');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const text = await response.text();
-        console.log('Raw response text (first 500 chars):', text.substring(0, 500)); // Debug log
+        console.log('Raw response text (first 500 chars):', text.substring(0, 500));
         
         // Replace NaN with null to make valid JSON
         const cleanText = text.replace(/\bNaN\b/g, 'null');
         const jsonData = JSON.parse(cleanText);
         
-        console.log('Parsed JSON data length:', jsonData.length); // Debug log
-        console.log('Sample data item:', jsonData[0]); // Debug log
+        console.log('Parsed JSON data length:', jsonData.length);
+        console.log('Sample data item:', jsonData[0]);
         
         // Convert the data to GameData format
         const games = jsonData.map(convertJsonToGameData);
-        console.log('Converted games count:', games.length); // Debug log
-        console.log('Sample converted game:', games[0]); // Debug log
-        console.log('All unique categories:', [...new Set(games.map(g => g.category))].sort()); // Debug log
+        console.log('Converted games count:', games.length);
+        console.log('Sample converted game:', games[0]);
+        console.log('All unique categories:', [...new Set(games.map(g => g.category))].sort());
         
         setRealGames(games);
         setLoading(false);
@@ -277,10 +257,11 @@ export default function Index() {
     // Filter by dropdowns
     if (filters.year && game.year !== filters.year) return false;
     
-    // Map user category to JSON category for filtering
+    // Fixed category filtering - map user category to JSON category for filtering
     if (filters.category) {
       const jsonCategory = categoryMapping[filters.category];
       if (jsonCategory && game.category !== jsonCategory) return false;
+      if (!jsonCategory && game.category !== filters.category) return false;
     }
     
     // Tech, age, purpose (multi)
@@ -288,7 +269,7 @@ export default function Index() {
     if (filters.age.length && !filters.age.some(a => game.age.includes(a))) return false;
     if (filters.purpose.length && !filters.purpose.some(p => game.purpose.includes(p))) return false;
     
-    // Audience filter - now properly implemented
+    // Audience filter
     if (filters.audience.length && !filters.audience.some(a => game.audience.includes(a))) return false;
 
     // Player Mode filter
@@ -301,16 +282,15 @@ export default function Index() {
     }
     return true;
   });
+  
   const navigate = useNavigate();
 
   // Chip filter event handler
   useEffect(() => {
     function onChip(ev: any) {
-      const {
-        field,
-        value
-      } = ev.detail || {};
+      const { field, value } = ev.detail || {};
       if (!field || !value) return;
+      
       if (["technology", "age", "purpose", "audience", "playerMode"].includes(field)) {
         setFilters(f => ({
           ...f,
@@ -329,15 +309,14 @@ export default function Index() {
           [field]: value
         }));
       }
-      // Optionally clear search on chip click
       setSearch("");
     }
     window.addEventListener("gamefilter:chip", onChip);
     return () => window.removeEventListener("gamefilter:chip", onChip);
   }, []);
 
-  console.log('Real games state:', realGames); // Debug log
-  console.log('Filtered games:', gamesFiltered); // Debug log
+  console.log('Real games state:', realGames);
+  console.log('Filtered games:', gamesFiltered);
 
   if (loading) {
     return (
