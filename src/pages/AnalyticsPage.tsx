@@ -292,8 +292,8 @@ export default function AnalyticsPage() {
           {/* Games by Category */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Games by Category</CardTitle>
-              <CardDescription>Distribution of games across different sustainability categories</CardDescription>
+              <CardTitle className="text-lg">Serious Games per Theme</CardTitle>
+              <CardDescription>Distribution of serious games</CardDescription>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig} className="h-80">
@@ -322,8 +322,8 @@ export default function AnalyticsPage() {
           {/* Games by Year */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg text-rose-600">Annual growth of serious games in publications</CardTitle>
-              <CardDescription>Timeline showing the number of games published each year</CardDescription>
+              <CardTitle className="text-lg text-gray-950">Serious Games per year</CardTitle>
+              <CardDescription>Timeline of the number of serious games published in academic outlets</CardDescription>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig} className="h-64">
@@ -348,8 +348,8 @@ export default function AnalyticsPage() {
           {/* Technology Distribution */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Technology Distribution</CardTitle>
-              <CardDescription>Types of technology platforms used in the games</CardDescription>
+              <CardTitle className="text-lg">Serious Games per Technology</CardTitle>
+              <CardDescription>Types of serious games</CardDescription>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig} className="h-64">
@@ -371,8 +371,8 @@ export default function AnalyticsPage() {
           {/* Purpose Distribution */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Game Purpose Distribution</CardTitle>
-              <CardDescription>Educational purposes and goals of the games</CardDescription>
+              <CardTitle className="text-lg">Serious Games per Purpose</CardTitle>
+              <CardDescription>Mono, double, and triple Purposes of the serious games</CardDescription>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig} className="h-64">
