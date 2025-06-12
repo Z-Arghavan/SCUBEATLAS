@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
@@ -273,7 +272,8 @@ export default function AnalyticsPage() {
     category: category.length > 20 ? category.substring(0, 20) + '...' : category,
     fullCategory: category,
     count,
-    fill: categoryColors[category] || "#0088FE"
+    fill: categoryColors[category] || "#0088FE",
+    ...Object.fromEntries(Object.keys(categoryData).map(cat => [cat, cat === category ? count : 0]))
   }));
 
   // Year trends
@@ -377,7 +377,7 @@ export default function AnalyticsPage() {
             <CardContent>
               <ChartContainer config={chartConfig} className="h-96">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 100 }}>
+                  <BarChart data={categoryChartData} margin={{ top: 5, right: 120, left: 20, bottom: 100 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="category" 
@@ -393,14 +393,16 @@ export default function AnalyticsPage() {
                     />
                     <ChartLegend 
                       content={<ChartLegendContent />}
-                      verticalAlign="bottom"
-                      height={60}
+                      verticalAlign="middle"
+                      align="right"
+                      layout="vertical"
+                      wrapperStyle={{ paddingLeft: '20px' }}
                     />
-                    {Object.entries(categoryData).map(([category, count]) => (
+                    {Object.entries(categoryData).map(([category]) => (
                       <Bar 
                         key={category}
-                        dataKey="count" 
-                        data={categoryChartData.filter(item => item.fullCategory === category)}
+                        dataKey={category}
+                        stackId="a"
                         fill={categoryColors[category] || "#0088FE"}
                         name={category}
                       />
