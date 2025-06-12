@@ -159,18 +159,18 @@ const categoryColors = {
 };
 
 const purposeColors = {
-  "Pedagogy": "#0088FE",
-  "Persuasion": "#00C49F",
-  "Participation": "#FFBB28",
-  "Pedagogy & Persuasion": "#FF8042",
-  "Pedagogy & Participation": "#8884D8",
-  "Persuasion & Participation": "#82CA9D",
-  "Pedagogy & Persuasion & Participation": "#FFC658"
+  "Pedagogy": "#E74C3C",
+  "Persuasion": "#3498DB",
+  "Participation": "#F39C12",
+  "Pedagogy & Persuasion": "#9B59B6",
+  "Pedagogy & Participation": "#1ABC9C",
+  "Persuasion & Participation": "#E67E22",
+  "Pedagogy & Persuasion & Participation": "#2ECC71"
 };
 
 const chartConfig = {
-  count: {
-    label: "Count",
+  frequency: {
+    label: "Frequency",
     color: "#0088FE",
   },
 };
@@ -292,8 +292,8 @@ export default function AnalyticsPage() {
 
   const purposeChartData = Object.entries(purposeData).map(([purpose, count]) => ({
     purpose,
-    count,
-    fill: purposeColors[purpose] || "#0088FE"
+    frequency: count,
+    fill: purposeColors[purpose] || "#E74C3C"
   }));
 
   return (
@@ -439,13 +439,19 @@ export default function AnalyticsPage() {
             <CardContent>
               <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={purposeChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <BarChart data={purposeChartData} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="purpose" fontSize={10} />
+                    <XAxis 
+                      dataKey="purpose" 
+                      fontSize={10}
+                      angle={-45}
+                      textAnchor="end"
+                      height={60}
+                    />
                     <YAxis fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <ChartLegend content={<ChartLegendContent />} />
-                    <Bar dataKey="count" fill="var(--color-count)" />
+                    <Bar dataKey="frequency" fill="var(--color-frequency)" />
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
