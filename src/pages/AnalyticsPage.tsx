@@ -448,9 +448,8 @@ export default function AnalyticsPage() {
                       textAnchor="end"
                       height={60}
                     />
-                    <YAxis fontSize={10} />
+                    <YAxis fontSize={10} label={{ value: 'Frequency', angle: -90, position: 'insideLeft' }} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <ChartLegend content={<ChartLegendContent />} />
                     <Bar dataKey="frequency" fill="var(--color-frequency)" />
                   </BarChart>
                 </ResponsiveContainer>
