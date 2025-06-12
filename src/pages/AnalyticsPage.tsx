@@ -9,126 +9,91 @@ import { GameData } from "@/components/GameCard";
 // Helper functions from Index.tsx
 function cleanText(text: string): string {
   if (!text || typeof text !== 'string') return text;
-  
-  return text
-    .replace(/GrEnergy Efficiency and Transitionn/g, "Green")
-    .replace(/Energy Efficiency and Transitionn/g, "Energy Efficiency and Transition")
-    .replace(/stUrban Developmentents/g, "students")
-    .replace(/enginEnergy Efficiency and Transitionring/g, "engineering")
-    .replace(/inclUrban Developmentes/g, "includes")
-    .replace(/Urban Developmentent/g, "student")
-    .replace(/€/g, "—")
-    .trim();
+  return text.replace(/GrEnergy Efficiency and Transitionn/g, "Green").replace(/Energy Efficiency and Transitionn/g, "Energy Efficiency and Transition").replace(/stUrban Developmentents/g, "students").replace(/enginEnergy Efficiency and Transitionring/g, "engineering").replace(/inclUrban Developmentes/g, "includes").replace(/Urban Developmentent/g, "student").replace(/€/g, "—").trim();
 }
-
 function normalizeCategory(category: string): string {
   if (!category) return "Sustainable Community Engagement";
-  
   const cleaned = cleanText(category);
-  
   const categoryMap: Record<string, string> = {
     "Urban Development and Planning": "Urban Development and Planning",
     "Energy Efficiency and Transition": "Energy Efficiency and Transition",
     "Natural Hazards and Extreme Events": "Natural Hazards and Extreme Events",
-    "Water Management": "Water Management", 
+    "Water Management": "Water Management",
     "Waste and Resource Management": "Waste and Resource Management",
     "Sustainable Community Engagement": "Sustainable Community Engagement",
-    "Construction and Design": "Construction and Design",
+    "Construction and Design": "Construction and Design"
   };
-  
   return categoryMap[cleaned] || "Sustainable Community Engagement";
 }
-
 const audienceMapping: Record<string, string> = {
   "S": "Students",
-  "B": "Business Professionals", 
+  "B": "Business Professionals",
   "G": "General Public"
 };
-
 const playerModeMapping: Record<string, string> = {
   "B": "Both",
   "M": "Multi Player",
   "S": "Single Player"
 };
-
 const purposeMapping: Record<string, string> = {
   "Pe": "Pedagogy",
-  "Pu": "Persuasion", 
+  "Pu": "Persuasion",
   "Pa": "Participation"
 };
-
 const ageMapping: Record<string, string> = {
   "C": "Children",
   "A": "Adults"
 };
-
 function parseTechnology(techData: any): string[] {
   if (!techData) return ["Digital"];
-  
   const tech = String(techData).toLowerCase().trim();
-  
   if (tech.includes('n/a') || tech === '') {
     return ["Digital"];
   }
-  
-  if ((tech.includes('boardgame') || tech.includes('board game')) && 
-      (tech.includes('pc') || tech.includes('mobile') || tech.includes('ar') || tech.includes('vr'))) {
+  if ((tech.includes('boardgame') || tech.includes('board game')) && (tech.includes('pc') || tech.includes('mobile') || tech.includes('ar') || tech.includes('vr'))) {
     return ["Hybrid"];
   }
-  
-  if (tech.includes('boardgame') || tech.includes('board game') || 
-      tech.includes('escape room') || tech === 'physical') {
+  if (tech.includes('boardgame') || tech.includes('board game') || tech.includes('escape room') || tech === 'physical') {
     return ["Physical"];
   }
-  
   if (tech.includes('vr') || tech.includes('ar') || tech.includes('xr')) {
     return ["Virtual Reality (XR)"];
   }
-  
   return ["Digital"];
 }
-
 function parseAudience(audienceData: any): string[] {
   if (!audienceData) return [];
   const mapped = audienceMapping[audienceData];
   return mapped ? [mapped] : [];
 }
-
 function parsePlayerMode(playerModeData: any): string[] {
   if (!playerModeData) return [];
   const mapped = playerModeMapping[playerModeData];
   return mapped ? [mapped] : [];
 }
-
 function parsePurpose(purposeData: any): string[] {
   if (!purposeData) return [];
-  
   if (typeof purposeData === 'string' && purposeData.includes('/')) {
     const parts = purposeData.split('/').map(p => p.trim());
     const mappedParts = parts.map(p => purposeMapping[p]).filter(Boolean);
-    
     const result = [...mappedParts];
     if (mappedParts.length > 1) {
       result.push(mappedParts.join(' & '));
     }
     return result;
   }
-  
   const mapped = purposeMapping[purposeData];
   return mapped ? [mapped] : [];
 }
-
 function parseAge(ageData: any): string[] {
   if (!ageData) return [];
   const mapped = ageMapping[ageData];
   return mapped ? [mapped] : [];
 }
-
 function convertJsonToGameData(jsonItem: any, index: number): GameData {
   const cleanTitle = cleanText(jsonItem.Title || "Untitled Article");
   const cleanDescription = cleanText(jsonItem.Description || "No description available");
   const cleanCategory = normalizeCategory(jsonItem.category);
-  
   return {
     id: index + 1,
     title: cleanTitle,
@@ -145,19 +110,16 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
     originalTechnology: jsonItem["PC/mobile"]
   };
 }
-
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658'];
-
 const categoryColors = {
   "Urban Development and Planning": "#0088FE",
-  "Energy Efficiency and Transition": "#00C49F", 
+  "Energy Efficiency and Transition": "#00C49F",
   "Natural Hazards and Extreme Events": "#FFBB28",
   "Water Management": "#FF8042",
   "Waste and Resource Management": "#8884D8",
   "Sustainable Community Engagement": "#82CA9D",
   "Construction and Design": "#FFC658"
 };
-
 const purposeColors = {
   "Pedagogy": "#E74C3C",
   "Persuasion": "#3498DB",
@@ -167,33 +129,22 @@ const purposeColors = {
   "Persuasion & Participation": "#E67E22",
   "Pedagogy & Persuasion & Participation": "#2ECC71"
 };
-
 const chartConfig = {
   frequency: {
     label: "Frequency",
-    color: "#0088FE",
-  },
+    color: "#0088FE"
+  }
 };
-
 export default function AnalyticsPage() {
   const [games, setGames] = useState<GameData[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const loadData = async () => {
       try {
         // Try loading from raw GitHub content first, then GitHub Pages paths
-        const possiblePaths = [
-          'https://raw.githubusercontent.com/Z-Arghavan/SCUBEATLAS/main/forRepo_Data.json',
-          'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json',
-          `${import.meta.env.BASE_URL}forRepo_Data.json`,
-          './forRepo_Data.json',
-          '/forRepo_Data.json'
-        ];
-        
+        const possiblePaths = ['https://raw.githubusercontent.com/Z-Arghavan/SCUBEATLAS/main/forRepo_Data.json', 'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json', `${import.meta.env.BASE_URL}forRepo_Data.json`, './forRepo_Data.json', '/forRepo_Data.json'];
         let response;
         let dataLoaded = false;
-        
         for (const path of possiblePaths) {
           try {
             console.log('Trying to fetch from:', path);
@@ -208,11 +159,9 @@ export default function AnalyticsPage() {
             continue;
           }
         }
-        
         if (!dataLoaded || !response?.ok) {
           throw new Error(`Failed to load data from any path. Last status: ${response?.status || 'unknown'}`);
         }
-        
         const text = await response.text();
         const cleanText = text.replace(/\bNaN\b/g, 'null');
         const jsonData = JSON.parse(cleanText);
@@ -225,31 +174,26 @@ export default function AnalyticsPage() {
         setLoading(false);
       }
     };
-
     loadData();
   }, []);
-
   if (loading) {
-    return (
-      <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
+    return <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
         <Header />
         <div className="flex-1 flex justify-center items-center">
           <div className="text-lg text-gray-500">Loading analytics...</div>
         </div>
         <Footer />
-      </main>
-    );
+      </main>;
   }
 
   // Calculate statistics
   const totalGames = games.length;
-  
+
   // Category distribution
   const categoryData = games.reduce((acc, game) => {
     acc[game.category] = (acc[game.category] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-
   const categoryChartData = Object.entries(categoryData).map(([category, count]) => ({
     category: category.length > 15 ? category.substring(0, 15) + '...' : category,
     fullCategory: category,
@@ -263,11 +207,10 @@ export default function AnalyticsPage() {
     acc[year] = (acc[year] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-
-  const yearChartData = Object.entries(yearData)
-    .filter(([year]) => year !== "Unknown")
-    .sort(([a], [b]) => Number(a) - Number(b))
-    .map(([year, count]) => ({ year, count }));
+  const yearChartData = Object.entries(yearData).filter(([year]) => year !== "Unknown").sort(([a], [b]) => Number(a) - Number(b)).map(([year, count]) => ({
+    year,
+    count
+  }));
 
   // Technology distribution
   const technologyData = games.reduce((acc, game) => {
@@ -276,7 +219,6 @@ export default function AnalyticsPage() {
     });
     return acc;
   }, {} as Record<string, number>);
-
   const technologyChartData = Object.entries(technologyData).map(([technology, count]) => ({
     technology,
     count
@@ -289,15 +231,12 @@ export default function AnalyticsPage() {
     });
     return acc;
   }, {} as Record<string, number>);
-
   const purposeChartData = Object.entries(purposeData).map(([purpose, count]) => ({
     purpose,
     frequency: count,
     fill: purposeColors[purpose] || "#E74C3C"
   }));
-
-  return (
-    <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
+  return <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
       <Header />
       <div className="flex-1 max-w-7xl w-full mx-auto py-6 px-4">
         <h1 className="text-3xl font-bold mb-2 text-center text-primary">
@@ -359,16 +298,19 @@ export default function AnalyticsPage() {
             <CardContent>
               <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 100 }}>
+                  <BarChart data={categoryChartData} margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 100
+                }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="category" 
-                      fontSize={10}
-                      angle={-45}
-                      textAnchor="end"
-                      height={100}
-                    />
-                    <YAxis fontSize={10} label={{ value: 'Frequency', angle: -90, position: 'insideLeft' }} />
+                    <XAxis dataKey="category" fontSize={10} angle={-45} textAnchor="end" height={100} />
+                    <YAxis fontSize={10} label={{
+                    value: 'Frequency',
+                    angle: -90,
+                    position: 'insideLeft'
+                  }} />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="count" />
                   </BarChart>
@@ -380,13 +322,18 @@ export default function AnalyticsPage() {
           {/* Games by Year */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Games by Year</CardTitle>
+              <CardTitle className="text-lg text-rose-600">Annual growth of serious games in publications</CardTitle>
               <CardDescription>Timeline showing the number of games published each year</CardDescription>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={yearChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <LineChart data={yearChartData} margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5
+                }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="year" fontSize={10} />
                     <YAxis fontSize={10} />
@@ -408,19 +355,11 @@ export default function AnalyticsPage() {
               <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie
-                      data={technologyChartData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ technology, percent }) => `${technology} ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={60}
-                      fill="#8884d8"
-                      dataKey="count"
-                    >
-                      {technologyChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
+                    <Pie data={technologyChartData} cx="50%" cy="50%" labelLine={false} label={({
+                    technology,
+                    percent
+                  }) => `${technology} ${(percent * 100).toFixed(0)}%`} outerRadius={60} fill="#8884d8" dataKey="count">
+                      {technologyChartData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                     </Pie>
                     <ChartTooltip content={<ChartTooltipContent />} />
                   </PieChart>
@@ -438,16 +377,19 @@ export default function AnalyticsPage() {
             <CardContent>
               <ChartContainer config={chartConfig} className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={purposeChartData} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
+                  <BarChart data={purposeChartData} margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 60
+                }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="purpose" 
-                      fontSize={10}
-                      angle={-45}
-                      textAnchor="end"
-                      height={60}
-                    />
-                    <YAxis fontSize={10} label={{ value: 'Frequency', angle: -90, position: 'insideLeft' }} />
+                    <XAxis dataKey="purpose" fontSize={10} angle={-45} textAnchor="end" height={60} />
+                    <YAxis fontSize={10} label={{
+                    value: 'Frequency',
+                    angle: -90,
+                    position: 'insideLeft'
+                  }} />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="frequency" fill="var(--color-frequency)" />
                   </BarChart>
@@ -458,6 +400,5 @@ export default function AnalyticsPage() {
         </div>
       </div>
       <Footer />
-    </main>
-  );
+    </main>;
 }
