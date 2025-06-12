@@ -133,6 +133,10 @@ const chartConfig = {
   frequency: {
     label: "Frequency",
     color: "#0088FE"
+  },
+  count: {
+    label: "Count",
+    color: "#00C49F"
   }
 };
 export default function AnalyticsPage() {
@@ -334,9 +338,13 @@ export default function AnalyticsPage() {
                 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="year" fontSize={10} />
-                    <YAxis fontSize={10} />
+                    <YAxis fontSize={10} label={{
+                    value: 'Frequency',
+                    angle: -90,
+                    position: 'insideLeft'
+                  }} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Line type="monotone" dataKey="count" stroke="var(--color-count)" strokeWidth={2} />
+                    <Line type="monotone" dataKey="count" stroke="#00C49F" strokeWidth={2} />
                   </LineChart>
                 </ResponsiveContainer>
               </ChartContainer>
