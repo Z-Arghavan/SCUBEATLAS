@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import GameFilterPanel, { Filters } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
@@ -223,10 +222,37 @@ export default function Index() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch('./forRepo_Data.json');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        // Try loading from raw GitHub content first, then GitHub Pages paths
+        const possiblePaths = [
+          'https://raw.githubusercontent.com/Z-Arghavan/SCUBEATLAS/main/forRepo_Data.json',
+          'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json',
+          `${import.meta.env.BASE_URL}forRepo_Data.json`,
+          './forRepo_Data.json',
+          '/forRepo_Data.json'
+        ];
+        
+        let response;
+        let dataLoaded = false;
+        
+        for (const path of possiblePaths) {
+          try {
+            console.log('Trying to fetch from:', path);
+            response = await fetch(path);
+            if (response.ok) {
+              console.log('Successfully loaded from:', path);
+              dataLoaded = true;
+              break;
+            }
+          } catch (error) {
+            console.log('Failed to fetch from:', path, error);
+            continue;
+          }
         }
+        
+        if (!dataLoaded || !response?.ok) {
+          throw new Error(`Failed to load data from any path. Last status: ${response?.status || 'unknown'}`);
+        }
+        
         const text = await response.text();
         console.log('Raw response text (first 500 chars):', text.substring(0, 500));
         
