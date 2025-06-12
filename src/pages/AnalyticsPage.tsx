@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
@@ -162,6 +163,34 @@ const chartConfig = {
   count: {
     label: "Count",
     color: "#0088FE",
+  },
+  "Urban Development and Planning": {
+    label: "Urban Development and Planning",
+    color: "#0088FE",
+  },
+  "Energy Efficiency and Transition": {
+    label: "Energy Efficiency and Transition", 
+    color: "#00C49F",
+  },
+  "Natural Hazards and Extreme Events": {
+    label: "Natural Hazards and Extreme Events",
+    color: "#FFBB28",
+  },
+  "Water Management": {
+    label: "Water Management",
+    color: "#FF8042",
+  },
+  "Waste and Resource Management": {
+    label: "Waste and Resource Management",
+    color: "#8884D8",
+  },
+  "Sustainable Community Engagement": {
+    label: "Sustainable Community Engagement",
+    color: "#82CA9D",
+  },
+  "Construction and Design": {
+    label: "Construction and Design",
+    color: "#FFC658",
   },
 };
 
@@ -346,9 +375,9 @@ export default function AnalyticsPage() {
               <CardDescription>Distribution of games across different sustainability categories</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80">
+              <ChartContainer config={chartConfig} className="h-96">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 80 }}>
+                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 100 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="category" 
@@ -358,9 +387,24 @@ export default function AnalyticsPage() {
                       height={80}
                     />
                     <YAxis fontSize={10} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <ChartLegend content={<ChartLegendContent />} />
-                    <Bar dataKey="count" />
+                    <ChartTooltip 
+                      content={<ChartTooltipContent />}
+                      labelFormatter={(value) => categoryChartData.find(item => item.category === value)?.fullCategory || value}
+                    />
+                    <ChartLegend 
+                      content={<ChartLegendContent />}
+                      verticalAlign="bottom"
+                      height={60}
+                    />
+                    {Object.entries(categoryData).map(([category, count]) => (
+                      <Bar 
+                        key={category}
+                        dataKey="count" 
+                        data={categoryChartData.filter(item => item.fullCategory === category)}
+                        fill={categoryColors[category] || "#0088FE"}
+                        name={category}
+                      />
+                    ))}
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
