@@ -163,34 +163,6 @@ const chartConfig = {
     label: "Count",
     color: "#0088FE",
   },
-  "Urban Development and Planning": {
-    label: "Urban Development and Planning",
-    color: "#0088FE",
-  },
-  "Energy Efficiency and Transition": {
-    label: "Energy Efficiency and Transition", 
-    color: "#00C49F",
-  },
-  "Natural Hazards and Extreme Events": {
-    label: "Natural Hazards and Extreme Events",
-    color: "#FFBB28",
-  },
-  "Water Management": {
-    label: "Water Management",
-    color: "#FF8042",
-  },
-  "Waste and Resource Management": {
-    label: "Waste and Resource Management",
-    color: "#8884D8",
-  },
-  "Sustainable Community Engagement": {
-    label: "Sustainable Community Engagement",
-    color: "#82CA9D",
-  },
-  "Construction and Design": {
-    label: "Construction and Design",
-    color: "#FFC658",
-  },
 };
 
 export default function AnalyticsPage() {
@@ -272,8 +244,7 @@ export default function AnalyticsPage() {
     category: category.length > 20 ? category.substring(0, 20) + '...' : category,
     fullCategory: category,
     count,
-    fill: categoryColors[category] || "#0088FE",
-    ...Object.fromEntries(Object.keys(categoryData).map(cat => [cat, cat === category ? count : 0]))
+    fill: categoryColors[category] || "#0088FE"
   }));
 
   // Year trends
@@ -375,9 +346,9 @@ export default function AnalyticsPage() {
               <CardDescription>Distribution of games across different sustainability categories</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-96">
+              <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryChartData} margin={{ top: 5, right: 120, left: 20, bottom: 100 }}>
+                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 80 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="category" 
@@ -387,26 +358,9 @@ export default function AnalyticsPage() {
                       height={80}
                     />
                     <YAxis fontSize={10} />
-                    <ChartTooltip 
-                      content={<ChartTooltipContent />}
-                      labelFormatter={(value) => categoryChartData.find(item => item.category === value)?.fullCategory || value}
-                    />
-                    <ChartLegend 
-                      content={<ChartLegendContent />}
-                      verticalAlign="middle"
-                      align="right"
-                      layout="vertical"
-                      wrapperStyle={{ paddingLeft: '20px' }}
-                    />
-                    {Object.entries(categoryData).map(([category]) => (
-                      <Bar 
-                        key={category}
-                        dataKey={category}
-                        stackId="a"
-                        fill={categoryColors[category] || "#0088FE"}
-                        name={category}
-                      />
-                    ))}
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Bar dataKey="count" />
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
