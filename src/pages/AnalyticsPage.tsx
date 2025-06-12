@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -163,12 +162,12 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // GitHub Pages specific paths - try the most likely locations
+        // Try loading from raw GitHub content first
         const possiblePaths = [
-          './forRepo_Data.json',  // Same directory as index.html
-          '/forRepo_Data.json',   // Root of domain
-          `${import.meta.env.BASE_URL}forRepo_Data.json`, // Using Vite's base URL
-          'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json' // Direct GitHub Pages URL
+          'https://raw.githubusercontent.com/Z-Arghavan/SCUBEATLAS/main/forRepo_Data.json',
+          './forRepo_Data.json',
+          '/forRepo_Data.json',
+          `${import.meta.env.BASE_URL}forRepo_Data.json`
         ];
         
         let response;
@@ -274,29 +273,6 @@ export default function AnalyticsPage() {
     count
   }));
 
-  // Purpose to Theme (Category) flow data for Sankey-like visualization
-  const purposeToThemeData = games.reduce((acc, game) => {
-    game.purpose.forEach(purpose => {
-      const key = `${purpose} → ${game.category}`;
-      acc[key] = (acc[key] || 0) + 1;
-    });
-    return acc;
-  }, {} as Record<string, number>);
-
-  const sankeyData = Object.entries(purposeToThemeData)
-    .map(([flow, count], index) => {
-      const [purpose, theme] = flow.split(' → ');
-      return { 
-        id: `sankey-${index}`, // Add unique ID
-        flow, 
-        purpose, 
-        theme, 
-        count 
-      };
-    })
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 15); // Show top 15 flows
-
   return (
     <main className="min-h-screen bg-gradient-to-b from-zinc-100 via-sky-50 to-green-50 flex flex-col">
       <Header />
@@ -345,49 +321,6 @@ export default function AnalyticsPage() {
             </CardHeader>
             <CardContent className="pt-0">
               <div className="text-2xl font-bold text-primary">{Object.keys(technologyData).length}</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Purpose to Theme Flow */}
-        <div className="mb-6">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Purpose to Theme Flow</CardTitle>
-              <CardDescription>How educational purposes connect to sustainability themes (top connections)</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer config={chartConfig} className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={sankeyData} layout="horizontal" margin={{ top: 5, right: 30, left: 150, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis 
-                      type="category" 
-                      dataKey="flow" 
-                      fontSize={10}
-                      width={140}
-                    />
-                    <ChartTooltip 
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          const data = payload[0].payload;
-                          return (
-                            <div className="bg-background border rounded-lg p-3 shadow-lg">
-                              <p className="font-semibold">{data.purpose}</p>
-                              <p className="text-sm text-muted-foreground">↓</p>
-                              <p className="font-semibold">{data.theme}</p>
-                              <p className="text-sm">Games: {data.count}</p>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Bar dataKey="count" fill="var(--color-count)" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
             </CardContent>
           </Card>
         </div>
