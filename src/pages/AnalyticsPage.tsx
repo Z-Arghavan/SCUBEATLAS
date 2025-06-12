@@ -158,6 +158,16 @@ const categoryColors = {
   "Construction and Design": "#FFC658"
 };
 
+const purposeColors = {
+  "Pedagogy": "#0088FE",
+  "Persuasion": "#00C49F",
+  "Participation": "#FFBB28",
+  "Pedagogy & Persuasion": "#FF8042",
+  "Pedagogy & Participation": "#8884D8",
+  "Persuasion & Participation": "#82CA9D",
+  "Pedagogy & Persuasion & Participation": "#FFC658"
+};
+
 const chartConfig = {
   count: {
     label: "Count",
@@ -282,7 +292,8 @@ export default function AnalyticsPage() {
 
   const purposeChartData = Object.entries(purposeData).map(([purpose, count]) => ({
     purpose,
-    count
+    count,
+    fill: purposeColors[purpose] || "#0088FE"
   }));
 
   return (
@@ -433,6 +444,7 @@ export default function AnalyticsPage() {
                     <XAxis dataKey="purpose" fontSize={10} />
                     <YAxis fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
+                    <ChartLegend content={<ChartLegendContent />} />
                     <Bar dataKey="count" fill="var(--color-count)" />
                   </BarChart>
                 </ResponsiveContainer>
