@@ -152,7 +152,7 @@ function parseTechnology(techData: any): string[] {
   
   // Handle VR/AR/XR
   if (tech.includes('vr') || tech.includes('ar') || tech.includes('xr')) {
-    return ["Virtual Reality (XR)"];
+    return ["Extended Reality (XR)"];
   }
   
   // Everything else is digital
