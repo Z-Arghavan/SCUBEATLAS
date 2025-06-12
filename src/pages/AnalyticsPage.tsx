@@ -404,6 +404,23 @@ export default function AnalyticsPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Citation Section */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-xl">Cite us or read more:</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="text-sm text-gray-700">
+              <p className="mb-3">
+                <span className="font-medium">1.</span> Akbarieh, A., Han, Q., & Klippel, A. (2025, June 9–10). Atlas of the serious games in the urban built environment. <em>2nd GeoGame Symposium</em>, Dublin.
+              </p>
+              <p>
+                <span className="font-medium">2.</span> Akbarieh, A., Han, Q., & Klippel, A. (2025). Playing for a purpose: A systematic review and framework for gamified sustainability interventions in urban built environments. <em>Results in Engineering</em>, 105277. <a href="https://doi.org/10.1016/j.rineng.2025.105277" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">https://doi.org/10.1016/j.rineng.2025.105277</a>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
       <Footer />
     </main>;
