@@ -242,9 +242,7 @@ export default function AnalyticsPage() {
         <h1 className="text-3xl font-bold mb-2 text-center text-primary">
           Serious Games Analytics Dashboard
         </h1>
-        <p className="text-lg text-gray-500 mb-6 text-center">
-          Insights and trends from the sustainable urban development games database
-        </p>
+        <p className="text-lg text-gray-500 mb-6 text-center">Insights and trends from the sustainable and circular urban built environment (SCUBE) database</p>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
