@@ -10,6 +10,9 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    headers: {
+      'Content-Type': 'application/javascript'
+    }
   },
   plugins: [
     react(),
@@ -27,7 +30,17 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: undefined,
+        format: 'es',
+        entryFileNames: '[name].[hash].js',
+        chunkFileNames: '[name].[hash].js',
+        assetFileNames: '[name].[hash].[ext]'
       },
     },
   },
+  esbuild: {
+    target: 'es2020'
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom']
+  }
 }));
