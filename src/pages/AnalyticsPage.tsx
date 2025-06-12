@@ -251,7 +251,7 @@ export default function AnalyticsPage() {
   }, {} as Record<string, number>);
 
   const categoryChartData = Object.entries(categoryData).map(([category, count]) => ({
-    category: category.length > 20 ? category.substring(0, 20) + '...' : category,
+    category: category.length > 15 ? category.substring(0, 15) + '...' : category,
     fullCategory: category,
     count,
     fill: categoryColors[category] || "#0088FE"
@@ -359,18 +359,17 @@ export default function AnalyticsPage() {
             <CardContent>
               <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 80 }}>
+                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 100 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="category" 
                       fontSize={10}
                       angle={-45}
                       textAnchor="end"
-                      height={80}
+                      height={100}
                     />
-                    <YAxis fontSize={10} />
+                    <YAxis fontSize={10} label={{ value: 'Frequency', angle: -90, position: 'insideLeft' }} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <ChartLegend content={<ChartLegendContent />} />
                     <Bar dataKey="count" />
                   </BarChart>
                 </ResponsiveContainer>
