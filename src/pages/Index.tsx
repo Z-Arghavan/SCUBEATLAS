@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import GameFilterPanel, { Filters } from "@/components/GameFilterPanel";
 import GameGrid from "@/components/GameGrid";
@@ -222,34 +223,42 @@ export default function Index() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Try loading from raw GitHub content first, then GitHub Pages paths
+        // Try loading from multiple sources with better error handling
         const possiblePaths = [
           'https://raw.githubusercontent.com/Z-Arghavan/SCUBEATLAS/main/forRepo_Data.json',
           'https://z-arghavan.github.io/SCUBEATLAS/forRepo_Data.json',
-          `${import.meta.env.BASE_URL}forRepo_Data.json`,
           './forRepo_Data.json',
-          '/forRepo_Data.json'
+          '/forRepo_Data.json',
+          `${window.location.origin}/forRepo_Data.json`
         ];
         
         let response;
         let dataLoaded = false;
+        let lastError;
         
         for (const path of possiblePaths) {
           try {
             console.log('Trying to fetch from:', path);
             response = await fetch(path);
+            console.log(`Response status for ${path}:`, response.status);
+            
             if (response.ok) {
               console.log('Successfully loaded from:', path);
               dataLoaded = true;
               break;
+            } else {
+              console.log(`Failed with status ${response.status} for:`, path);
             }
           } catch (error) {
             console.log('Failed to fetch from:', path, error);
+            lastError = error;
             continue;
           }
         }
         
         if (!dataLoaded || !response?.ok) {
+          console.error('All fetch attempts failed. Last error:', lastError);
+          console.error(`Last response status: ${response?.status || 'unknown'}`);
           throw new Error(`Failed to load data from any path. Last status: ${response?.status || 'unknown'}`);
         }
         
