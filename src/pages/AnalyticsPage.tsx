@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -148,6 +148,16 @@ function convertJsonToGameData(jsonItem: any, index: number): GameData {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658'];
 
+const categoryColors = {
+  "Urban Development and Planning": "#0088FE",
+  "Energy Efficiency and Transition": "#00C49F", 
+  "Natural Hazards and Extreme Events": "#FFBB28",
+  "Water Management": "#FF8042",
+  "Waste and Resource Management": "#8884D8",
+  "Sustainable Community Engagement": "#82CA9D",
+  "Construction and Design": "#FFC658"
+};
+
 const chartConfig = {
   count: {
     label: "Count",
@@ -233,7 +243,8 @@ export default function AnalyticsPage() {
   const categoryChartData = Object.entries(categoryData).map(([category, count]) => ({
     category: category.length > 20 ? category.substring(0, 20) + '...' : category,
     fullCategory: category,
-    count
+    count,
+    fill: categoryColors[category] || "#0088FE"
   }));
 
   // Year trends
@@ -335,20 +346,21 @@ export default function AnalyticsPage() {
               <CardDescription>Distribution of games across different sustainability categories</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-64">
+              <ChartContainer config={chartConfig} className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
+                  <BarChart data={categoryChartData} margin={{ top: 5, right: 30, left: 20, bottom: 80 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="category" 
                       fontSize={10}
                       angle={-45}
                       textAnchor="end"
-                      height={60}
+                      height={80}
                     />
                     <YAxis fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count" fill="var(--color-count)" />
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Bar dataKey="count" />
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
