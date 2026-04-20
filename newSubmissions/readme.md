@@ -47,3 +47,10 @@ Please copy and fill in the following template:
 - Submitted content may be shared as part of the SCUBE Atlas.
 
 Thank you for your contribution.
+
+## Examples 
+
+![Atlas overview 1](images/Atlas_serious%20games%20in%20built%20environment_1.PNG)
+![Atlas overview 2](images/Atlas_serious%20games%20in%20built%20environment_2.PNG)
+![Atlas overview 3](images/Atlas_serious%20games%20in%20built%20environment_3.PNG)
+![Atlas overview 4](images/Atlas_serious%20games%20in%20built%20environment_4.PNG)
