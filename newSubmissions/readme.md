@@ -3,7 +3,9 @@
 Thank you for contributing your game to the SCUBE Atlas.
 
 Please submit your game by adding a comment to this issue:
-👉 https://github.com/Z-Arghavan/SCUBEATLAS/issues/1
+
+👉👉 https://github.com/Z-Arghavan/SCUBEATLAS/issues
+👉example: https://github.com/Z-Arghavan/SCUBEATLAS/issues/1
 
 ## Why contribute?
 
